@@ -1,6 +1,7 @@
 
-package Controller;
+package Modal;
 
+import Controller.ConectionFactory;
 import java.sql.*;
 
 public class LoginDao {

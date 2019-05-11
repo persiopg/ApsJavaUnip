@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package Modal;
 
-import Modal.Funcionario;
+import Controller.ConectionFactory;
 import java.sql.*;
 
 /**
@@ -17,11 +17,44 @@ public class FuncionarioDao {
     private String senha;
     private int matricula;
     private boolean permissao;
-    private Funcionario fun;
-    private ConectionFactory con = new ConectionFactory();
+    private FuncionarioDao fun;
+    private final ConectionFactory con = new ConectionFactory();
     private PreparedStatement pst;
 
-    public Funcionario getFuncionario(String user, String pass) throws Exception {
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public int getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(int matricula) {
+        this.matricula = matricula;
+    }
+
+    public boolean isPermissao() {
+        return permissao;
+    }
+
+    public void setPermissao(boolean permissao) {
+        this.permissao = permissao;
+    }
+
+    
+    public FuncionarioDao getFuncionario(String user, String pass) throws Exception {
         
         String use = "SELECT * FROM tb_funcionario WHERE nm_func LIKE ?;";
         pst = con.Conection().prepareStatement(use);
@@ -33,14 +66,11 @@ public class FuncionarioDao {
             this.matricula = resultUser.getInt("id_func");
             this.permissao = resultUser.getBoolean("permissao");
         }
-         
-        System.out.println(nome);
-        System.out.println(senha);
         
         pst.close();
         con.Close();
         if(user.equals(nome) && pass.equals(senha) ){ 
-            fun = new Funcionario();            
+            fun = new FuncionarioDao();            
             fun.setNome(nome);
             fun.setSenha(senha);
             fun.setPermissao(permissao);
@@ -72,7 +102,7 @@ public class FuncionarioDao {
         }
     }
 
-    public void cadastrar(Funcionario fun) throws Exception{
+    public void cadastrar(FuncionarioDao fun) throws Exception{
         String use = "INSERT INTO tb_funcionario (id_func, nm_func, senha_func, permissao) VALUES(?,?,?,?);";
         pst = con.Conection().prepareStatement(use);
         pst.setInt(1, fun.getMatricula());
@@ -84,7 +114,7 @@ public class FuncionarioDao {
         con.Close();
         
     }
-    public void Deletar(Funcionario fun) throws Exception{
+    public void Deletar(FuncionarioDao fun) throws Exception{
         String sql = "DELETE FROM tb_funcionario WHERE id_func = ?;";
         pst = con.Conection().prepareStatement(sql);        
         pst.setLong(1,fun.getMatricula());

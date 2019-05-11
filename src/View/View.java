@@ -5,10 +5,8 @@
  */
 package View;
 
+import Modal.FuncionarioDao;
 import Controller.*;
-import Modal.Funcionario;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,27 +16,30 @@ import javax.swing.JOptionPane;
 public class View extends javax.swing.JFrame {
         JCaixa caixa;
         ConectionFactory con;
-        FuncionarioDao funDao;
-        Funcionario f1;
+        FuncionarioDao funcDao;
+        //Funcionario funcDao;
     
-    public View(Funcionario fun) throws Exception{        
+    public View(FuncionarioDao fun) throws Exception{        
         con = new ConectionFactory();
         con.Conection();       
-        f1 = new Funcionario();
-        f1 = fun;initComponents();
+        funcDao = new FuncionarioDao();
+        funcDao = fun;
         initComponents();
         Inicializacao();
     }
-    public View(){        
+    public View(){              
+        initComponents();
+        Inicializacao();
     }
     private void Inicializacao(){
         jPanelCorpoBase.setVisible(true);
-        Btn(false, false, false);                        
-        jNomeFunc.setText(f1.getNome());
-        jPermissao.setText(String.valueOf(f1.getMatricula()));
+        PainelView(false, false, false);                        
+        jNomeFunc.setText(funcDao.getNome());
+        jPermissao.setText(String.valueOf(funcDao.isPermissao()));
+        
     }
     
-    private void Btn(boolean btnFunc, boolean btnEstoq, boolean btnCad){        
+    private void PainelView(boolean btnFunc, boolean btnEstoq, boolean btnCad){        
         jPanelBaseEstoque.setVisible(btnEstoq);
         jPanelBaseCadProd.setVisible(btnCad);
         jPanelBaseFuncionario.setVisible( btnFunc);
@@ -246,7 +247,7 @@ public class View extends javax.swing.JFrame {
                     .addComponent(jTxtQteProd)
                     .addComponent(jTxtVlrCompra)
                     .addComponent(jTxtVlrVenda, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
-                .addContainerGap(99, Short.MAX_VALUE))
+                .addContainerGap(561, Short.MAX_VALUE))
         );
         jPanelBaseCadProdLayout.setVerticalGroup(
             jPanelBaseCadProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -271,7 +272,7 @@ public class View extends javax.swing.JFrame {
                 .addGroup(jPanelBaseCadProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTxtVlrVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(307, Short.MAX_VALUE))
+                .addContainerGap(337, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jLayeredPaneCadProdLayout = new javax.swing.GroupLayout(jLayeredPaneCadProd);
@@ -429,24 +430,24 @@ public class View extends javax.swing.JFrame {
 
     private void jBtnCaixaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnCaixaActionPerformed
         // TODO add your handling code here:
-        if(f1.isPermissao()){            
-            caixa =  new JCaixa(f1);
+        if(funcDao.isPermissao()){            
+            caixa =  new JCaixa(funcDao);
             this.dispose();
             caixa.setVisible(true);
         }
         else{
-            JOptionPane.showMessageDialog(null,"");
+            JOptionPane.showMessageDialog(null,"usuario sem permissao");
         }
     }//GEN-LAST:event_jBtnCaixaActionPerformed
 
     private void jBtnEstoqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEstoqueActionPerformed
         // TODO add your handling code here
-        Btn(false, true, false);
+        PainelView(false, true, false);
     }//GEN-LAST:event_jBtnEstoqueActionPerformed
 
     private void jBtnEntradaProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEntradaProdActionPerformed
         // TODO add your handling code here:
-        Btn(false, false, true);
+        PainelView(false, false, true);
     }//GEN-LAST:event_jBtnEntradaProdActionPerformed
 
     private void jTxtCodBarrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtCodBarrasActionPerformed
@@ -458,41 +459,40 @@ public class View extends javax.swing.JFrame {
 
     private void jBtnGraficoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnGraficoActionPerformed
         // TODO add your handling code here:
-        Btn(true, false, false);
+        
+        if(funcDao.isPermissao()){
+            PainelView(true, false, false);
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "usuario sem permissao");
+        }
     }//GEN-LAST:event_jBtnGraficoActionPerformed
 
     private void jBtnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnCadastrarActionPerformed
         // TODO add your handling code here:
-        if(f1.isPermissao()){
+        
             try {
-                Funcionario newFunc = new Funcionario();
-                funDao = new FuncionarioDao();
-                newFunc.setNome(jTxtNome.getText());
-                newFunc.setSenha(jPassword.getText());
-                newFunc.setMatricula(Integer.parseInt(jTxtMatricula.getText()));
-                jCheckBox1.getAction();
-                newFunc.setPermissao(jCheckBox1.getHideActionText());
-                funDao.cadastrar(newFunc);
+                Funcionario.FuncCadastrar(jTxtNome.getText(), jPassword.getText(), Integer.parseInt(jTxtMatricula.getText()), jCheckBox1.getHideActionText());                
                 JOptionPane.showMessageDialog(null, "Cadastro realizada com sucesso");
             } catch (Exception ex) {
-                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, ex);
             }
             jTxtNome.setText(null);
             jTxtMatricula.setText(null);
             jPassword.setText(null);
             jCheckBox1.setDropTarget(getDropTarget());
             
-        }
+        
     }//GEN-LAST:event_jBtnCadastrarActionPerformed
 
     private void jTxtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtNomeActionPerformed
             try {
                 // TODO add your handling code here:
-                funDao = new FuncionarioDao();
-                jTxtMatricula.setText(funDao.Busca(jTxtNome.getText()));
+                funcDao = new FuncionarioDao();
+                jTxtMatricula.setText(funcDao.Busca(jTxtNome.getText()));
+                
             } catch (Exception ex) {
-                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                JOptionPane.showMessageDialog(null, ex);            }
     }//GEN-LAST:event_jTxtNomeActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
@@ -501,24 +501,19 @@ public class View extends javax.swing.JFrame {
 
     private void jBtnDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnDeletarActionPerformed
         // TODO add your handling code here
-        if(f1.isPermissao()){
+        
             try {
-                Funcionario newFunc = new Funcionario();
-                funDao = new FuncionarioDao();
-                newFunc.setNome(jTxtNome.getText());
-                newFunc.setSenha(jPassword.getText());
-                newFunc.setMatricula(Integer.parseInt(jTxtMatricula.getText()));
-                newFunc.setPermissao(jCheckBox1.getHideActionText());
-                funDao.Deletar(newFunc);
-                JOptionPane.showMessageDialog(null, "Cadastro realizada com sucesso");
+                Funcionario.FuncDeletar(jTxtNome.getText(), jPassword.getText(), Integer.parseInt(jTxtMatricula.getText()), jCheckBox1.getHideActionText());
+                JOptionPane.showMessageDialog(null, "Cadastro Deletado com sucesso");
             } catch (Exception ex) {
-                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, ex);
             }
             jTxtNome.setText(null);
             jTxtMatricula.setText(null);
             jPassword.setText(null);
-            jCheckBox1.setDropTarget(getDropTarget());  
-        }
+            jCheckBox1.setDisabledIcon(null);
+
+        
     }//GEN-LAST:event_jBtnDeletarActionPerformed
 
     /**
@@ -555,7 +550,7 @@ public class View extends javax.swing.JFrame {
                 try {
                     new View().setVisible(true);
                 } catch (Exception ex) {
-                    Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, ex);
                 }
             }
         });

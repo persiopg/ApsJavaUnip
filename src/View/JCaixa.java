@@ -5,7 +5,7 @@
  */
 package View;
 
-import Modal.Funcionario;
+import Modal.FuncionarioDao;
 
 /**
  *
@@ -13,9 +13,9 @@ import Modal.Funcionario;
  */
 public class JCaixa extends javax.swing.JFrame {
 
-    Funcionario fun;
+    FuncionarioDao fun;
     
-    public JCaixa(Funcionario fun) {
+    public JCaixa(FuncionarioDao fun) {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         this.fun = fun;

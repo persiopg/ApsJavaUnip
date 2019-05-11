@@ -1,8 +1,9 @@
 
 package View;
 
+import Modal.LoginDao;
+import Modal.FuncionarioDao;
 import Controller.*;
-import Modal.Funcionario;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -12,17 +13,13 @@ import javax.swing.JOptionPane;
  * @author user
  */
 public class jLogin extends javax.swing.JFrame {
-     Funcionario func;
-     FuncionarioDao funcDao;
-     ConectionFactory con;
+     FuncionarioDao func;
      LoginDao login;
      View view;
      
     public jLogin() throws Exception {
         initComponents();
-        con = new ConectionFactory();
-        con.Conection();
-        func = new Funcionario();
+        func = new FuncionarioDao();
         
     }
 
@@ -122,15 +119,13 @@ public class jLogin extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         login = new LoginDao();
-        funcDao = new FuncionarioDao();
         String user = jTxtuser.getText();
         String pass = jPassword.getText();
         
          try {
             if(login.getLogin(user, pass)){                
-                this.dispose();
-                func = funcDao.getFuncionario(user, pass);
-                view = new View(func);
+                this.dispose();                
+                view = new View(Funcionario.getFuncionario(user, pass));
                 view.setVisible(true);
              }
              else{

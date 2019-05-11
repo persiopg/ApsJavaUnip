@@ -58,7 +58,7 @@
                       <Component id="jBtnGrafico" alignment="1" max="32767" attributes="0"/>
                       <Component id="jBtnEstoque" alignment="1" max="32767" attributes="0"/>
                       <Component id="jBtnCaixa" alignment="1" max="32767" attributes="0"/>
-                      <Group type="102" alignment="0" attributes="0">
+                      <Group type="102" attributes="0">
                           <Component id="jNomeFunc" min="-2" pref="72" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jPermissao" min="-2" pref="72" max="-2" attributes="0"/>
@@ -281,7 +281,7 @@
                               <Component id="jTxtVlrCompra" max="32767" attributes="0"/>
                               <Component id="jTxtVlrVenda" alignment="0" pref="137" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="99" max="32767" attributes="0"/>
+                          <EmptySpace pref="561" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -313,7 +313,7 @@
                               <Component id="jLabel5" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
                               <Component id="jTxtVlrVenda" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="307" max="32767" attributes="0"/>
+                          <EmptySpace pref="337" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>

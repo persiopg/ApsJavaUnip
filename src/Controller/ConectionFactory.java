@@ -19,7 +19,6 @@ public class ConectionFactory {
         try {
             Class.forName(drive);
             con = DriverManager.getConnection(url,usuario,senha);
-            System.out.println("conexao realizada com sucesso!!!");
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println(e);
         }       
