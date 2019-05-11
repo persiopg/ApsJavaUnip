@@ -17,7 +17,6 @@ public class View extends javax.swing.JFrame {
         JCaixa caixa;
         ConectionFactory con;
         FuncionarioDao funcDao;
-        //Funcionario funcDao;
     
     public View(FuncionarioDao fun) throws Exception{        
         con = new ConectionFactory();
@@ -481,6 +480,7 @@ public class View extends javax.swing.JFrame {
             jTxtMatricula.setText(null);
             jPassword.setText(null);
             jCheckBox1.setDropTarget(getDropTarget());
+            jPermissao.setText(String.valueOf(funcDao.isPermissao()));
             
         
     }//GEN-LAST:event_jBtnCadastrarActionPerformed
@@ -488,7 +488,6 @@ public class View extends javax.swing.JFrame {
     private void jTxtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtNomeActionPerformed
             try {
                 // TODO add your handling code here:
-                funcDao = new FuncionarioDao();
                 jTxtMatricula.setText(funcDao.Busca(jTxtNome.getText()));
                 
             } catch (Exception ex) {
@@ -511,9 +510,9 @@ public class View extends javax.swing.JFrame {
             jTxtNome.setText(null);
             jTxtMatricula.setText(null);
             jPassword.setText(null);
-            jCheckBox1.setDisabledIcon(null);
+            jCheckBox1.setDisabledIcon(null);    
+            jPermissao.setText(String.valueOf(funcDao.isPermissao()));
 
-        
     }//GEN-LAST:event_jBtnDeletarActionPerformed
 
     /**
