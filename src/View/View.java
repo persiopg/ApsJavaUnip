@@ -7,6 +7,8 @@ package View;
 
 import Modal.FuncionarioDao;
 import Controller.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -76,6 +78,8 @@ public class View extends javax.swing.JFrame {
         jTxtQteProd = new javax.swing.JTextField();
         jTxtVlrCompra = new javax.swing.JTextField();
         jTxtVlrVenda = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jTxtVolumeProd = new javax.swing.JTextField();
         jLayeredPaneFuncionario = new javax.swing.JLayeredPane();
         jPanelBaseFuncionario = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
@@ -227,6 +231,8 @@ public class View extends javax.swing.JFrame {
             }
         });
 
+        jLabel9.setText("Volume: ");
+
         javax.swing.GroupLayout jPanelBaseCadProdLayout = new javax.swing.GroupLayout(jPanelBaseCadProd);
         jPanelBaseCadProd.setLayout(jPanelBaseCadProdLayout);
         jPanelBaseCadProdLayout.setHorizontalGroup(
@@ -234,18 +240,26 @@ public class View extends javax.swing.JFrame {
             .addGroup(jPanelBaseCadProdLayout.createSequentialGroup()
                 .addGap(114, 114, 114)
                 .addGroup(jPanelBaseCadProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanelBaseCadProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTxtCodBarras)
-                    .addComponent(jTxtNmProd)
-                    .addComponent(jTxtQteProd)
-                    .addComponent(jTxtVlrCompra)
-                    .addComponent(jTxtVlrVenda, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
+                    .addGroup(jPanelBaseCadProdLayout.createSequentialGroup()
+                        .addGroup(jPanelBaseCadProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4))
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanelBaseCadProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTxtVlrVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTxtQteProd, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTxtVlrCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanelBaseCadProdLayout.createSequentialGroup()
+                        .addGroup(jPanelBaseCadProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanelBaseCadProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTxtCodBarras, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+                            .addComponent(jTxtNmProd)
+                            .addComponent(jTxtVolumeProd))))
                 .addContainerGap(561, Short.MAX_VALUE))
         );
         jPanelBaseCadProdLayout.setVerticalGroup(
@@ -261,17 +275,21 @@ public class View extends javax.swing.JFrame {
                     .addComponent(jTxtNmProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelBaseCadProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTxtVolumeProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelBaseCadProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTxtQteProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelBaseCadProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTxtVlrCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelBaseCadProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTxtVlrVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(337, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelBaseCadProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTxtVlrCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(303, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jLayeredPaneCadProdLayout = new javax.swing.GroupLayout(jLayeredPaneCadProd);
@@ -450,8 +468,16 @@ public class View extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtnEntradaProdActionPerformed
 
     private void jTxtCodBarrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtCodBarrasActionPerformed
-        // TODO add your handling code here:
-                
+            try {
+                // TODO add your handling code here:
+                 String produto[] = Produto.buscaProd(jTxtCodBarras.getText());
+                 for(int i = 0;i<=produto.length;i++){
+                     System.out.println(produto[i]);
+                 }
+                 
+            } catch (Exception ex) {
+                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+            }
                 
         
     }//GEN-LAST:event_jTxtCodBarrasActionPerformed
@@ -571,6 +597,7 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JLayeredPane jLayeredPaneCadProd;
     private javax.swing.JLayeredPane jLayeredPaneEstoque;
     private javax.swing.JLayeredPane jLayeredPaneFuncionario;
@@ -591,5 +618,6 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JTextField jTxtQteProd;
     private javax.swing.JTextField jTxtVlrCompra;
     private javax.swing.JTextField jTxtVlrVenda;
+    private javax.swing.JTextField jTxtVolumeProd;
     // End of variables declaration//GEN-END:variables
 }
