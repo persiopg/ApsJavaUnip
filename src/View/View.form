@@ -265,36 +265,36 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="114" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="112" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Component id="jBtnCadProd" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jTxtVlrVenda" min="-2" pref="137" max="-2" attributes="0"/>
-                                      <Component id="jTxtQteProd" min="-2" pref="137" max="-2" attributes="0"/>
-                                      <Component id="jTxtVlrCompra" min="-2" pref="137" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Group type="103" groupAlignment="1" attributes="0">
+                                          <Component id="jLabel3" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="jLabel5" max="32767" attributes="0"/>
+                                          <Component id="jLabel4" max="32767" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Group type="102" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="jLabel1" max="32767" attributes="0"/>
                                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel9" max="32767" attributes="0"/>
                                   </Group>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="jTxtCodBarras" pref="137" max="32767" attributes="0"/>
-                                      <Component id="jTxtNmProd" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="jTxtVolumeProd" max="32767" attributes="0"/>
-                                  </Group>
+                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace pref="561" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jBtnAlterar" min="-2" max="-2" attributes="0"/>
+                              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace pref="532" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -302,36 +302,28 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel1" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
-                              <Component id="jTxtCodBarras" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Component id="jLabel1" min="-2" pref="28" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jLabel2" min="-2" pref="28" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jLabel9" min="-2" pref="28" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jLabel4" min="-2" pref="28" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jLabel5" min="-2" pref="28" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jLabel3" min="-2" pref="28" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="jPanel1" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel2" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
-                              <Component id="jTxtNmProd" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jBtnCadProd" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jBtnAlterar" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel9" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
-                              <Component id="jTxtVolumeProd" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel4" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
-                              <Component id="jTxtQteProd" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel5" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
-                              <Component id="jTxtVlrVenda" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel3" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
-                              <Component id="jTxtVlrCompra" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace pref="303" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="262" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -341,11 +333,6 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Codigo de Barras: "/>
                   </Properties>
-                </Component>
-                <Component class="javax.swing.JTextField" name="jTxtCodBarras">
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTxtCodBarrasActionPerformed"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel2">
                   <Properties>
@@ -367,24 +354,85 @@
                     <Property name="text" type="java.lang.String" value="Valor Venda: "/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTxtNmProd">
-                </Component>
-                <Component class="javax.swing.JTextField" name="jTxtQteProd">
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTxtQteProdActionPerformed"/>
-                  </Events>
-                </Component>
-                <Component class="javax.swing.JTextField" name="jTxtVlrCompra">
-                </Component>
-                <Component class="javax.swing.JTextField" name="jTxtVlrVenda">
-                </Component>
                 <Component class="javax.swing.JLabel" name="jLabel9">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Volume: "/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTxtVolumeProd">
+                <Component class="javax.swing.JButton" name="jBtnCadProd">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Cadastrar"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBtnCadProdActionPerformed"/>
+                  </Events>
                 </Component>
+                <Component class="javax.swing.JButton" name="jBtnAlterar">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Alterar/Entrar Prod"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBtnAlterarActionPerformed"/>
+                  </Events>
+                </Component>
+                <Container class="javax.swing.JPanel" name="jPanel1">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="99" green="99" red="ff" type="rgb"/>
+                    </Property>
+                  </Properties>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jTxtVlrCompra" alignment="0" pref="168" max="32767" attributes="0"/>
+                          <Component id="jTxtVlrVenda" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jTxtQteProd" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jTxtVolumeProd" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jTxtNmProd" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jTxtCodBarras" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                              <Component id="jTxtCodBarras" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="jTxtNmProd" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="jTxtVolumeProd" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                              <Component id="jTxtQteProd" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="jTxtVlrVenda" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="jTxtVlrCompra" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                  <SubComponents>
+                    <Component class="javax.swing.JTextField" name="jTxtVlrCompra">
+                    </Component>
+                    <Component class="javax.swing.JTextField" name="jTxtCodBarras">
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTxtCodBarrasActionPerformed"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JTextField" name="jTxtNmProd">
+                    </Component>
+                    <Component class="javax.swing.JTextField" name="jTxtVolumeProd">
+                    </Component>
+                    <Component class="javax.swing.JTextField" name="jTxtQteProd">
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTxtQteProdActionPerformed"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JTextField" name="jTxtVlrVenda">
+                    </Component>
+                  </SubComponents>
+                </Container>
               </SubComponents>
             </Container>
           </SubComponents>

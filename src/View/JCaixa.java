@@ -5,7 +5,11 @@
  */
 package View;
 
+import Controller.Produto;
 import Modal.FuncionarioDao;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -38,7 +42,7 @@ public class JCaixa extends javax.swing.JFrame {
         jPanelCaixa = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        jListProd = new javax.swing.JList();
         jPanel1 = new javax.swing.JPanel();
         jTxtCodBarra = new javax.swing.JTextField();
         jtxtSubTotal = new javax.swing.JTextField();
@@ -59,12 +63,12 @@ public class JCaixa extends javax.swing.JFrame {
             }
         });
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
+        jListProd.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(jListProd);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -76,6 +80,12 @@ public class JCaixa extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
+
+        jTxtCodBarra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTxtCodBarraActionPerformed(evt);
+            }
+        });
 
         jtxtSubTotal.setEditable(false);
         jtxtSubTotal.addActionListener(new java.awt.event.ActionListener() {
@@ -208,6 +218,21 @@ public class JCaixa extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jtxtSubTotalActionPerformed
 
+    private void jTxtCodBarraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtCodBarraActionPerformed
+        // TODO add your handling code here:
+        
+        try {
+            String prod[] = new String[6];
+            prod = Produto.buscaProd(jTxtCodBarra.getText());
+            if(prod[1] != null ){
+                 jListProd.add(Produto.AddLista(jTxtCodBarra.getText()), this);
+                 }
+        } catch (Exception ex) {
+            Logger.getLogger(JCaixa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                 
+    }//GEN-LAST:event_jTxtCodBarraActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -250,7 +275,7 @@ public class JCaixa extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLayeredPane jLayeredPaneCaixa;
     private javax.swing.JLayeredPane jLayeredPaneFinalCompra;
-    private javax.swing.JList jList1;
+    private javax.swing.JList jListProd;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelCaixa;
     private javax.swing.JPanel jPanelFinalcompra;

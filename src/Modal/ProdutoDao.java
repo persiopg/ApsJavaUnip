@@ -1,7 +1,9 @@
 package Modal;
 
 import Controller.*;
+import java.awt.List;
 import java.sql.*;
+import java.util.ArrayList;
 
 
 
@@ -22,20 +24,64 @@ public class ProdutoDao {
         pst = con.Conection().prepareStatement(use);
         pst.setString(1, cod);
         ResultSet resultUser = pst.executeQuery();
+        
         while (resultUser.next()) {        
-            produto.cod_barra = resultUser.getString("cod_barra");
-            produto.nm_prod = resultUser.getString("nm_prod");
-            produto.vol_prod = resultUser.getString("vl_compra");
-            produto.qte_prod = resultUser.getInt("qte_prod");
-            produto.vl_compra = resultUser.getDouble("vl_compra");
-            produto.vl_venda = resultUser.getDouble("vl_venda");
+            cod_barra = resultUser.getString("cod_barra");
+            nm_prod = resultUser.getString("nm_prod");
+            vol_prod = resultUser.getString("vl_compra");
+            qte_prod = resultUser.getInt("qte_prod");
+            vl_compra = resultUser.getDouble("vl_compra");
+            vl_venda = resultUser.getDouble("vl_venda");
         }
          
         pst.close();
         con.Close();
+        produto = new ProdutoDao();
+        
+        produto.setCod_barra(cod_barra);        
+        produto.setNm_prod(nm_prod);
+        produto.setVol_prod(vol_prod);
+        produto.setQte_prod(qte_prod);
+        produto.setVl_compra(vl_compra);
+        produto.setVl_venda(vl_venda);
         
         return produto;
+        
     }
+    public void cadastrar (ProdutoDao prod) throws Exception{
+        String use = "INSERT INTO tb_produto (cod_barra, nm_prod, vol_prod, qte_prod, vl_compra, vl_venda) VALUES(?,?,?,?,?,?);";
+        pst = con.Conection().prepareStatement(use);        
+        pst.setString(1, prod.getCod_barra());
+        pst.setString(2, prod.getNm_prod());
+        pst.setString(3,prod.getVol_prod());
+        pst.setInt(4,prod.getQte_prod());
+        pst.setDouble(5,prod.getVl_compra());
+        pst.setDouble(6,prod.getVl_venda());               
+        pst.execute();
+        pst.close();
+        con.Close();
+    }
+    public void Atualizar(ProdutoDao prod) throws Exception{
+        String use = "UPDATE tb_produto SET cod_barra = ?, nm_prod = ?, vol_prod = ?, qte_prod = ?, vl_compra = ?, vl_venda = ? WHERE cod_barra = ?";
+        pst = con.Conection().prepareStatement(use);        
+        pst.setString(1, prod.getCod_barra());
+        pst.setString(2, prod.getNm_prod());
+        pst.setString(3,prod.getVol_prod());
+        pst.setInt(4,prod.getQte_prod());
+        pst.setDouble(5,prod.getVl_compra());
+        pst.setDouble(6,prod.getVl_venda());       
+        pst.setString(7, prod.getCod_barra());
+        pst.execute();
+        pst.close();
+        con.Close();
+    }
+
+    public String getNm_prod() {
+        return nm_prod;
+    }
+    
+    
+   // public 
 
     public String getCod_barra() {
         return cod_barra;
@@ -43,10 +89,6 @@ public class ProdutoDao {
 
     public void setCod_barra(String cod_barra) {
         this.cod_barra = cod_barra;
-    }
-
-    public String getNm_prod() {
-        return nm_prod;
     }
 
     public void setNm_prod(String nm_prod) {
@@ -84,5 +126,14 @@ public class ProdutoDao {
     public void setVl_venda(double vl_venda) {
         this.vl_venda = vl_venda;
     }
-    
+    public String getProdutoString(String cod) throws Exception{
+        String produtos;
+        ProdutoDao prod = busca(cod);
+        produtos = prod.toString();
+        return produtos;
+    }
+    @Override
+    public String toString() {
+        return " nm_prod=" + nm_prod + "----------vol_prod=" + vol_prod + "\n vl_venda=" + vl_venda + '}';
+    }
 }
