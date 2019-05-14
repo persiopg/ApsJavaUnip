@@ -178,16 +178,28 @@ public class View extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Cod_Bar", "Nome", "Volume", "Quantidade", "Valor Compra", "Valor Venda"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setMinWidth(100);
+            jTable1.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         jPanelBaseEstoque.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
@@ -499,6 +511,7 @@ public class View extends javax.swing.JFrame {
         // TODO add your handling code here
         if(funcDao.isPermissao()){
             PainelView(false, true, false);
+            //jTable1.add
         }
         else{
             JOptionPane.showMessageDialog(null, "Usuario sem permissao");
