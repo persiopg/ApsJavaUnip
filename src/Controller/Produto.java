@@ -1,6 +1,7 @@
 package Controller;
 
 import Modal.*;
+import java.sql.Array;
 import java.util.ArrayList;
 
 public class Produto {
@@ -19,6 +20,19 @@ public class Produto {
         
         return produto;
     }
+    public static String[] buscaVenda(String Cod) throws Exception{
+        ProdutoDao prod = new ProdutoDao().busca(Cod);
+        
+        String produto[] = new String[3];
+       
+        produto[0] = prod.getCod_barra();
+        produto[1] = prod.getVol_prod();
+        produto[2] = String.valueOf(prod.getVl_venda());
+
+        
+        return produto;
+    }
+    
     
  public static void ProdAtualizar(String cod,String nome, String vol, int qte, double vl_comp, double vl_venda) throws Exception{
      ProdutoDao prod = new ProdutoDao();

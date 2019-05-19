@@ -28,7 +28,7 @@ public class ProdutoDao {
         while (resultUser.next()) {        
             cod_barra = resultUser.getString("cod_barra");
             nm_prod = resultUser.getString("nm_prod");
-            vol_prod = resultUser.getString("vl_compra");
+            vol_prod = resultUser.getString("vol_prod");
             qte_prod = resultUser.getInt("qte_prod");
             vl_compra = resultUser.getDouble("vl_compra");
             vl_venda = resultUser.getDouble("vl_venda");
@@ -75,7 +75,44 @@ public class ProdutoDao {
         pst.close();
         con.Close();
     }
+    private ResultSet Buscartodos() throws Exception{
+        
+        String use = "SELECT * FROM tb_produto;";
+        pst = con.Conection().prepareStatement(use);
+        ResultSet resultUser = pst.executeQuery();
+        
+        return resultUser;
+    }
 
+    public ArrayList<ProdutoDao> Produtos() throws Exception{
+        ArrayList<ProdutoDao> produtos = new ArrayList<>();        
+        
+        ResultSet resultUser = Buscartodos();
+        
+        while (resultUser.next()) {
+            ProdutoDao prod = new ProdutoDao();
+            
+            prod.setCod_barra(resultUser.getString("cod_barra"));
+            prod.setNm_prod(resultUser.getString("nm_prod"));
+            prod.setVol_prod(resultUser.getString("vol_prod"));
+            prod.setQte_prod(resultUser.getInt("qte_prod"));
+            prod.setVl_compra(resultUser.getDouble("vl_compra"));
+            prod.setVl_venda(resultUser.getDouble("vl_venda"));  
+            
+            produtos.add(prod);
+            
+            prod = null;
+        }  
+               
+        return produtos;
+    }
+    public static final ArrayList<ProdutoDao> ProdVenda(ProdutoDao prod) throws Exception{
+        ArrayList<ProdutoDao> produtos = new ArrayList<>();        
+        produtos.add(prod);
+        
+        return produtos;
+     }
+    
     public String getNm_prod() {
         return nm_prod;
     }
@@ -134,6 +171,6 @@ public class ProdutoDao {
     }
     @Override
     public String toString() {
-        return " nm_prod=" + nm_prod + "----------vol_prod=" + vol_prod + "\n vl_venda=" + vl_venda + '}';
+        return "nm_prod= " + nm_prod + "----------vol_prod= " + vol_prod ;
     }
 }

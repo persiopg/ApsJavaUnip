@@ -6,10 +6,13 @@
 package View;
 
 import Controller.Produto;
-import Modal.FuncionarioDao;
+import Modal.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -17,17 +20,81 @@ import java.util.logging.Logger;
  */
 public class JCaixa extends javax.swing.JFrame {
 
-    FuncionarioDao fun;
+    private FuncionarioDao fun;
+    private VendasDao vendaCaixas;
+    private ArrayList<String[]>Quantidade;
+    private ArrayList<VendasDao>venda;
+    private ArrayList<ProdutoDao> todosProd;
+    private int cont=0;
+    private double ultimoValor;
+    private int ultimaQte;
+    private int ultimaPossicaoAdd;
     
     public JCaixa(FuncionarioDao fun) {
         initComponents();
-        
-        this.setExtendedState(MAXIMIZED_BOTH);
+        inicializacao();
         this.fun = fun;
-        
     }
     public JCaixa(){
+         initComponents();
+         inicializacao();
+         
+    }
+    private void inicializacao(){
+        vendaCaixas = new VendasDao();
+        Quantidade = new ArrayList<>();
+        venda = new ArrayList<>();
+        todosProd = new ArrayList<>();
+        this.setExtendedState(MAXIMIZED_BOTH);
+        this.setUndecorated(true);
+        jTxtCodBarra.grabFocus();
+        jPanelFinalcompra.setVisible(false);
+        jTxtSubTotal.setText("0");
+       
+    }
+    public void readTable(){
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+        modelo.setRowCount(0);
+                        
+    }
+    public void excluirUltimaLinha(){
         
+        Quantidade.get(ultimaPossicaoAdd)[1] = String.valueOf(Integer.parseInt(Quantidade.get(ultimaPossicaoAdd)[1])+ultimaQte);
+        Quantidade.get(ultimaPossicaoAdd)[2] = String.valueOf(Double.parseDouble(Quantidade.get(ultimaPossicaoAdd)[2])- ultimoValor);
+        SubMatRemove(ultimoValor, Double.parseDouble(jTxtSubTotal.getText()));
+        ((DefaultTableModel) jTable1.getModel()).removeRow(jTable1.getRowCount()-1);
+}
+    
+    public void readTable(String[] prod){
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+        
+        
+        double valor = Double.parseDouble(prod[5]) * Integer.parseInt(jTxtQte.getText());
+        
+        modelo.addRow(new Object[]{
+            prod[0],
+            prod[1] + " " + prod[2],
+            Integer.parseInt(jTxtQte.getText()),
+            "R$ " + String.valueOf(valor)
+        }); 
+        SubMatAdd(valor,Double.parseDouble(jTxtSubTotal.getText()));
+                        
+    }
+    private void SubMatAdd(double valor, double sub){
+        double result = 0;
+        result = valor + sub;
+         System.out.println("valor pra add:" +result);
+        jTxtSubTotal.setText(String.valueOf(result));
+    }
+    
+    private void SubMatRemove(double valor, double sub){
+        double result = 0;
+        result = sub - valor;
+        if(result <= 0){
+            result =0;
+        }
+        System.out.println("valor:"+valor+"sub:"+sub+"valor pra remover:" +result);
+        jTxtSubTotal.setText(String.valueOf(result));
     }
 
     /**
@@ -46,19 +113,28 @@ public class JCaixa extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jTxtCodBarra = new javax.swing.JTextField();
-        jtxtSubTotal = new javax.swing.JTextField();
+        jTxtSubTotal = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jTxtQte = new javax.swing.JTextField();
         jLayeredPaneFinalCompra = new javax.swing.JLayeredPane();
         jPanelFinalcompra = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        jLabel4 = new javax.swing.JLabel();
+        jComboBoxPagamento = new javax.swing.JComboBox();
+        jValorFinal = new javax.swing.JLabel();
+        jValorclient = new javax.swing.JTextField();
+        jTroco = new javax.swing.JTextField();
+        jBtnFinalizar = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -73,11 +149,12 @@ public class JCaixa extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable2);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Caixa Aberto");
 
         jPanelCaixa.setBackground(new java.awt.Color(102, 102, 255));
 
-        jButton1.setText("jButton1");
+        jButton1.setText("Finalizar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -92,7 +169,7 @@ public class JCaixa extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 584, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         jTxtCodBarra.addActionListener(new java.awt.event.ActionListener() {
@@ -101,10 +178,10 @@ public class JCaixa extends javax.swing.JFrame {
             }
         });
 
-        jtxtSubTotal.setEditable(false);
-        jtxtSubTotal.addActionListener(new java.awt.event.ActionListener() {
+        jTxtSubTotal.setEditable(false);
+        jTxtSubTotal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtxtSubTotalActionPerformed(evt);
+                jTxtSubTotalActionPerformed(evt);
             }
         });
 
@@ -119,27 +196,44 @@ public class JCaixa extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Codigo de Barras", "Descrissao"
+                "Codigo de Barras", "Descrissao", "Quantidade", "Valor"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, true, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
         jScrollPane3.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setMinWidth(100);
+            jTable1.getColumnModel().getColumn(0).setMinWidth(150);
             jTable1.getColumnModel().getColumn(0).setMaxWidth(250);
+            jTable1.getColumnModel().getColumn(2).setMinWidth(50);
+            jTable1.getColumnModel().getColumn(2).setMaxWidth(100);
+            jTable1.getColumnModel().getColumn(3).setMinWidth(150);
+            jTable1.getColumnModel().getColumn(3).setMaxWidth(250);
         }
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setText("Qte.:");
 
-        jTextField1.setEditable(false);
+        jTxtQte.setEditable(false);
+        jTxtQte.setText("1");
+        jTxtQte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTxtQteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelCaixaLayout = new javax.swing.GroupLayout(jPanelCaixa);
         jPanelCaixa.setLayout(jPanelCaixaLayout);
@@ -160,19 +254,19 @@ public class JCaixa extends javax.swing.JFrame {
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                         .addGroup(jPanelCaixaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jtxtSubTotal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+                            .addComponent(jTxtSubTotal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
                             .addComponent(jTxtCodBarra, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addGap(28, 28, 28)
                 .addGroup(jPanelCaixaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelCaixaLayout.createSequentialGroup()
                         .addComponent(jButton1)
-                        .addContainerGap(122, Short.MAX_VALUE))
+                        .addContainerGap(124, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelCaixaLayout.createSequentialGroup()
                         .addGroup(jPanelCaixaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanelCaixaLayout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField1))
+                                .addComponent(jTxtQte))
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(20, 20, 20))))
         );
@@ -190,13 +284,13 @@ public class JCaixa extends javax.swing.JFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanelCaixaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jtxtSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTxtSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton1)))
                     .addGroup(jPanelCaixaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jTxtCodBarra, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jTxtQte, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(236, 236, 236))
         );
 
@@ -214,23 +308,70 @@ public class JCaixa extends javax.swing.JFrame {
 
         jPanelFinalcompra.setBackground(new java.awt.Color(255, 255, 153));
 
-        jScrollPane2.setBackground(new java.awt.Color(255, 255, 204));
+        jLabel4.setFont(new java.awt.Font("Tahoma", 3, 24)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Selecione o metodo de pagamento");
+
+        jComboBoxPagamento.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "<Selecione Metodo de Pagamento>", "Dinheiro", "Credito", "Debito" }));
+        jComboBoxPagamento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxPagamentoActionPerformed(evt);
+            }
+        });
+
+        jValorFinal.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
+        jValorFinal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jValorFinal.setText("R$ 00.00");
+
+        jValorclient.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jValorclient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jValorclientActionPerformed(evt);
+            }
+        });
+
+        jTroco.setEditable(false);
+        jTroco.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTroco.setDoubleBuffered(true);
+
+        jBtnFinalizar.setText("Finalizar Compra");
+        jBtnFinalizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnFinalizarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelFinalcompraLayout = new javax.swing.GroupLayout(jPanelFinalcompra);
         jPanelFinalcompra.setLayout(jPanelFinalcompraLayout);
         jPanelFinalcompraLayout.setHorizontalGroup(
             jPanelFinalcompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelFinalcompraLayout.createSequentialGroup()
-                .addGap(218, 218, 218)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(707, Short.MAX_VALUE))
+                .addGap(340, 340, 340)
+                .addGroup(jPanelFinalcompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jValorFinal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jComboBoxPagamento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jValorclient)
+                    .addComponent(jTroco)
+                    .addComponent(jBtnFinalizar))
+                .addGap(347, 347, 347))
         );
         jPanelFinalcompraLayout.setVerticalGroup(
             jPanelFinalcompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelFinalcompraLayout.createSequentialGroup()
-                .addGap(156, 156, 156)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(470, Short.MAX_VALUE))
+                .addGap(157, 157, 157)
+                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jValorFinal, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBoxPagamento)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jValorclient)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTroco)
+                .addGap(41, 41, 41)
+                .addComponent(jBtnFinalizar)
+                .addGap(470, 470, 470))
         );
 
         javax.swing.GroupLayout jLayeredPaneFinalCompraLayout = new javax.swing.GroupLayout(jLayeredPaneFinalCompra);
@@ -245,10 +386,48 @@ public class JCaixa extends javax.swing.JFrame {
         );
         jLayeredPaneFinalCompra.setLayer(jPanelFinalcompra, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        jMenu2.setText("File");
+        jMenu2.setText("Arquivos");
+
+        jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0));
+        jMenuItem4.setText("Sair");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem4);
+
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setText("Edit");
+        jMenu3.setText("Comandos");
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
+        jMenuItem1.setText("Adicionar Qte");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem1);
+
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, 0));
+        jMenuItem2.setText("Excluir");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem2);
+
+        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F9, 0));
+        jMenuItem3.setText("Finalizar compra");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem3);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -268,33 +447,177 @@ public class JCaixa extends javax.swing.JFrame {
                 .addComponent(jLayeredPaneFinalCompra))
         );
 
-        setBounds(0, 0, 1116, 859);
+        setSize(new java.awt.Dimension(1116, 859));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        jValorFinal.setVisible(true);
+        jTroco.setVisible(true);
         jPanelCaixa.setVisible(false);
         jPanelFinalcompra.setVisible(true);
+        jBtnFinalizar.setVisible(true);
+        jValorFinal.setText(jTxtSubTotal.getText());
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jtxtSubTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxtSubTotalActionPerformed
+    private void jTxtSubTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtSubTotalActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jtxtSubTotalActionPerformed
+        
+    }//GEN-LAST:event_jTxtSubTotalActionPerformed
 
     private void jTxtCodBarraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtCodBarraActionPerformed
         // TODO add your handling code here:
-        
+        this.ultimoValor = 0;
+        this.ultimaQte = 0;
+        this.ultimaPossicaoAdd = 0;
         try {
             String prod[] = new String[6];
-            prod = Produto.buscaProd(jTxtCodBarra.getText());
-            if(prod[1] != null ){
-                 
+            String qte[] = new String[3];
+                 prod = Produto.buscaProd(jTxtCodBarra.getText());
+                 if(prod[1] != null ){
+                     qte[0] = prod[0];
+                     qte[1] = prod[3];
+                     qte[2] = prod[5];
+                     if(!Quantidade.isEmpty()){
+                        for(int i=0;i<Quantidade.size();i++){
+                           if(qte[0].equals(Quantidade.get(i)[0])){
+                               if(Integer.parseInt(jTxtQte.getText())<=Integer.parseInt(Quantidade.get(i)[1])){
+                                   int qteTemp = 0;
+                                   double valorTemp;
+                                   qteTemp = Integer.parseInt(Quantidade.get(i)[1])-Integer.parseInt(jTxtQte.getText());
+                                   valorTemp = Double.parseDouble(Quantidade.get(i)[2])+(Double.parseDouble(qte[2]) * Integer.parseInt(jTxtQte.getText()));
+                                   this.ultimaQte = Integer.parseInt(jTxtQte.getText());
+                                   this.ultimoValor = Double.parseDouble(qte[2]) * Integer.parseInt(jTxtQte.getText());
+                                   this.ultimaPossicaoAdd = i;
+                                   Quantidade.get(i)[1] = String.valueOf(qteTemp);
+                                   Quantidade.get(i)[2] = String.valueOf(valorTemp);
+                                   readTable(prod);
+                                   jTxtCodBarra.setText("");
+                                   System.out.println("sai if");
+                                   break;
+                               }else{
+                                   JOptionPane.showMessageDialog(this, "Quantidade indisponivez em estoque");
+                               }                       
+                           }  
+                            
+                        }
+                     }
+                     else{
+                        if(Integer.parseInt(jTxtQte.getText())<=Integer.parseInt(qte[1])){    
+                            this.ultimaQte = Integer.parseInt(qte[1]);
+                            this.ultimoValor = Double.parseDouble(qte[2]) * Integer.parseInt(jTxtQte.getText());
+                            this.ultimaPossicaoAdd = 0;
+                            qte[1] = String.valueOf(Integer.parseInt(qte[1]) - Integer.parseInt(jTxtQte.getText()));
+                            Quantidade.add(qte);
+                            readTable(prod);
+                            jTxtCodBarra.setText("");
+                            System.out.println("sai else");
+                        }
+                        else{
+                           JOptionPane.showMessageDialog(this, "Quantidade indisponivez em estoque");
+                        } 
+                    }
+                     for (int i = 0; i < Quantidade.size(); i++) {
+                         System.out.println(Quantidade.get(i)[0]);
+                         System.out.println(Quantidade.get(i)[1]);
+                         System.out.println(Quantidade.get(i)[2]);
+                     }
                  }
-        } catch (Exception ex) {
-            Logger.getLogger(JCaixa.class.getName()).log(Level.SEVERE, null, ex);
+                 prod = null;
+        }        
+        catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex);
         }
                  
     }//GEN-LAST:event_jTxtCodBarraActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        if(jTxtQte.isCursorSet()){
+            jTxtCodBarra.grabFocus();
+            jTxtQte.setEditable(false);
+        }else{
+            jTxtQte.setEditable(true);
+            jTxtQte.grabFocus();
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jTxtQteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtQteActionPerformed
+        // TODO add your handling code here:
+        jTxtCodBarraActionPerformed(evt);
+        jTxtQte.setText("1");
+        jTxtQte.setEditable(false);
+        
+    }//GEN-LAST:event_jTxtQteActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        jButton1ActionPerformed(evt);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jComboBoxPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxPagamentoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxPagamentoActionPerformed
+
+    private void jValorclientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jValorclientActionPerformed
+        // TODO add your handling code here:
+        double troco = 0;
+        troco = Double.parseDouble(jValorclient.getText()) - Double.valueOf(jValorFinal.getText());
+        jTroco.setText(String.valueOf(troco));
+    }//GEN-LAST:event_jValorclientActionPerformed
+
+    private void jBtnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnFinalizarActionPerformed
+        // TODO add your handling code here:
+        
+        if(jComboBoxPagamento.getSelectedItem().equals("<Selecione Metodo de Pagamento>")){
+            JOptionPane.showMessageDialog(this, "Selecione um Metodo de Pagamento");
+        }
+        else{
+            if(jValorclient.getText() == "" || jValorclient.getText() == "0" || jValorclient.getText() == " "){
+                JOptionPane.showMessageDialog(this, "Infome o valor pago");
+            }
+            else{
+                
+                cont++;
+                vendaCaixas.setFuncioranrio(fun);
+                vendaCaixas.setData(LocalDate.now());
+                vendaCaixas.setVendas(cont);
+                double valortotal = 0;
+                for (int i = 0; i < Quantidade.size(); i++) {
+                    System.out.println("entrei");
+                    double valor =0;
+                    //valor = Double.parseDouble(Quantidade.get(i)[3]);          
+                    valortotal += valor;
+                    valor = 0;
+                }
+                vendaCaixas.setValor(valortotal);
+                try {
+                    readTable();
+                    Quantidade.clear();
+                } catch (Exception ex) {
+                    Logger.getLogger(JCaixa.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                JOptionPane.showMessageDialog(this, "compra Finalizada");
+                jPanelCaixa.setVisible(true);
+                jPanelFinalcompra.setVisible(false);
+                jTxtSubTotal.setText("0");
+                jValorclient.setText("");
+                jTroco.setText("");
+            }
+        }
+    }//GEN-LAST:event_jBtnFinalizarActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        excluirUltimaLinha();
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -333,25 +656,34 @@ public class JCaixa extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBtnFinalizar;
     private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox jComboBoxPagamento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLayeredPane jLayeredPaneCaixa;
     private javax.swing.JLayeredPane jLayeredPaneFinalCompra;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelCaixa;
     private javax.swing.JPanel jPanelFinalcompra;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTroco;
     private javax.swing.JTextField jTxtCodBarra;
-    private javax.swing.JTextField jtxtSubTotal;
+    private javax.swing.JTextField jTxtQte;
+    private javax.swing.JTextField jTxtSubTotal;
+    private javax.swing.JLabel jValorFinal;
+    private javax.swing.JTextField jValorclient;
     // End of variables declaration//GEN-END:variables
 }

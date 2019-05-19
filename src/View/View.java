@@ -8,9 +8,12 @@ package View;
 import Modal.FuncionarioDao;
 import Controller.*;
 import Modal.ProdutoDao;
+import com.sun.org.apache.bcel.internal.generic.AALOAD;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -20,7 +23,9 @@ public class View extends javax.swing.JFrame {
         JCaixa caixa;
         ConectionFactory con;
         FuncionarioDao funcDao;
-    
+        TableCt Modelo;
+        
+////    
     public View(FuncionarioDao fun) throws Exception{        
         con = new ConectionFactory();
         con.Conection();       
@@ -28,6 +33,34 @@ public class View extends javax.swing.JFrame {
         funcDao = fun;
         initComponents();
         Inicializacao();
+        LoadTable();
+        
+    }
+     public void LoadTable(){
+               
+            try {
+                readTable();
+            } catch (Exception ex) {
+                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    
+    public void readTable() throws Exception{
+        ProdutoDao prod = new ProdutoDao();
+        DefaultTableModel modelo = (DefaultTableModel) jTableEstoque.getModel();
+        modelo.setRowCount(0);
+        
+        for(ProdutoDao p:prod.Produtos()){
+            
+            modelo.addRow(new Object[]{
+                p.getCod_barra(),
+                p.getNm_prod(),
+                p.getVol_prod(),
+                p.getQte_prod(),
+                p.getVl_compra(),
+                p.getVl_venda()
+            });
+        }
     }
     public View(){              
         initComponents();
@@ -65,8 +98,13 @@ public class View extends javax.swing.JFrame {
         jPanelCorpoBase = new javax.swing.JPanel();
         jLayeredPaneEstoque = new javax.swing.JLayeredPane();
         jPanelBaseEstoque = new javax.swing.JPanel();
+        jTabbeGuia = new javax.swing.JTabbedPane();
+        jEstoque = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableEstoque = new javax.swing.JTable();
+        jCaixa = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTableCaixa = new javax.swing.JTable();
         jLayeredPaneCadProd = new javax.swing.JLayeredPane();
         jPanelBaseCadProd = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -176,12 +214,9 @@ public class View extends javax.swing.JFrame {
         jPanelBaseEstoque.setBackground(new java.awt.Color(0, 51, 204));
         jPanelBaseEstoque.setLayout(new java.awt.BorderLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableEstoque.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "Cod_Bar", "Nome", "Volume", "Quantidade", "Valor Compra", "Valor Venda"
@@ -190,34 +225,89 @@ public class View extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setMinWidth(100);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
+        jScrollPane1.setViewportView(jTableEstoque);
+        if (jTableEstoque.getColumnModel().getColumnCount() > 0) {
+            jTableEstoque.getColumnModel().getColumn(0).setMinWidth(100);
         }
 
-        jPanelBaseEstoque.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        javax.swing.GroupLayout jEstoqueLayout = new javax.swing.GroupLayout(jEstoque);
+        jEstoque.setLayout(jEstoqueLayout);
+        jEstoqueLayout.setHorizontalGroup(
+            jEstoqueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 906, Short.MAX_VALUE)
+            .addGroup(jEstoqueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 906, Short.MAX_VALUE))
+        );
+        jEstoqueLayout.setVerticalGroup(
+            jEstoqueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 511, Short.MAX_VALUE)
+            .addGroup(jEstoqueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE))
+        );
+
+        jTabbeGuia.addTab("tab1", jEstoque);
+
+        jTableCaixa.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Funcionario", "vendas", "data", "valor"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(jTableCaixa);
+
+        javax.swing.GroupLayout jCaixaLayout = new javax.swing.GroupLayout(jCaixa);
+        jCaixa.setLayout(jCaixaLayout);
+        jCaixaLayout.setHorizontalGroup(
+            jCaixaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 906, Short.MAX_VALUE)
+        );
+        jCaixaLayout.setVerticalGroup(
+            jCaixaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
+        );
+
+        jTabbeGuia.addTab("tab2", jCaixa);
+
+        jPanelBaseEstoque.add(jTabbeGuia, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout jLayeredPaneEstoqueLayout = new javax.swing.GroupLayout(jLayeredPaneEstoque);
         jLayeredPaneEstoque.setLayout(jLayeredPaneEstoqueLayout);
         jLayeredPaneEstoqueLayout.setHorizontalGroup(
             jLayeredPaneEstoqueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLayeredPaneEstoqueLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanelBaseEstoque, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanelBaseEstoque, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jLayeredPaneEstoqueLayout.setVerticalGroup(
             jLayeredPaneEstoqueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLayeredPaneEstoqueLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanelBaseEstoque, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanelBaseEstoque, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
         );
         jLayeredPaneEstoque.setLayer(jPanelBaseEstoque, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -511,7 +601,7 @@ public class View extends javax.swing.JFrame {
         // TODO add your handling code here
         if(funcDao.isPermissao()){
             PainelView(false, true, false);
-            //jTable1.add
+            
         }
         else{
             JOptionPane.showMessageDialog(null, "Usuario sem permissao");
@@ -628,6 +718,7 @@ public class View extends javax.swing.JFrame {
 
                 Produto.ProdAtualizar(jTxtCodBarras.getText(), jTxtNmProd.getText(), jTxtVolumeProd.getText(), qte, vl_comp, vl_venda);
                 JOptionPane.showMessageDialog(null, "Cadastro Atualizado");
+                readTable();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex);
             }
@@ -646,6 +737,7 @@ public class View extends javax.swing.JFrame {
 
                     Produto.Prodcadastrar(jTxtCodBarras.getText(), jTxtNmProd.getText(), jTxtVolumeProd.getText(), qte, vl_comp, vl_venda);
                     JOptionPane.showMessageDialog(null, "Cadastro Atualizado");
+                    readTable();
                 }
                  else{
                      JOptionPane.showMessageDialog(null, "produto ja cadastrado");
@@ -706,7 +798,9 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JButton jBtnEntradaProd;
     private javax.swing.JButton jBtnEstoque;
     private javax.swing.JButton jBtnGrafico;
+    private javax.swing.JPanel jCaixa;
     private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JPanel jEstoque;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -729,7 +823,10 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JPasswordField jPassword;
     private javax.swing.JLabel jPermissao;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbeGuia;
+    private javax.swing.JTable jTableCaixa;
+    private javax.swing.JTable jTableEstoque;
     private javax.swing.JTextField jTxtCodBarras;
     private javax.swing.JTextField jTxtMatricula;
     private javax.swing.JTextField jTxtNmProd;
