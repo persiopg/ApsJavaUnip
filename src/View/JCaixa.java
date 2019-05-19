@@ -6,9 +6,10 @@
 package View;
 
 import Controller.Produto;
+import Controller.caixa;
+import Controller.venda;
 import Modal.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -21,80 +22,134 @@ import javax.swing.table.DefaultTableModel;
 public class JCaixa extends javax.swing.JFrame {
 
     private FuncionarioDao fun;
-    private VendasDao vendaCaixas;
-    private ArrayList<String[]>Quantidade;
-    private ArrayList<VendasDao>venda;
-    private ArrayList<ProdutoDao> todosProd;
-    private int cont=0;
+    private int cont = 0;
+    private int contExcluir = 0;
+    private double valor;
     private double ultimoValor;
     private int ultimaQte;
-    private int ultimaPossicaoAdd;
-    
+    private String ultimacod;
+
     public JCaixa(FuncionarioDao fun) {
         initComponents();
         inicializacao();
         this.fun = fun;
     }
-    public JCaixa(){
-         initComponents();
-         inicializacao();
-         
+
+    public JCaixa() {
+        initComponents();
+        inicializacao();
+
     }
-    private void inicializacao(){
-        vendaCaixas = new VendasDao();
-        Quantidade = new ArrayList<>();
-        venda = new ArrayList<>();
-        todosProd = new ArrayList<>();
+
+    private void inicializacao() {
         this.setExtendedState(MAXIMIZED_BOTH);
         this.setUndecorated(true);
-        jTxtCodBarra.grabFocus();
+        jTxtCodBarra.requestFocus();
         jPanelFinalcompra.setVisible(false);
         jTxtSubTotal.setText("0");
-       
+
     }
-    public void readTable(){
+
+    public void readTable() {
         DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
         modelo.setRowCount(0);
-                        
+
     }
-    public void excluirUltimaLinha(){
-        
-        Quantidade.get(ultimaPossicaoAdd)[1] = String.valueOf(Integer.parseInt(Quantidade.get(ultimaPossicaoAdd)[1])+ultimaQte);
-        Quantidade.get(ultimaPossicaoAdd)[2] = String.valueOf(Double.parseDouble(Quantidade.get(ultimaPossicaoAdd)[2])- ultimoValor);
+
+    public void excluirUltimaLinha() {
+        valor = venda.BuscaultValor(ultimacod) - ultimoValor;
+        int tempqte = venda.BuscaQte(ultimacod) + ultimaQte;
         SubMatRemove(ultimoValor, Double.parseDouble(jTxtSubTotal.getText()));
-        ((DefaultTableModel) jTable1.getModel()).removeRow(jTable1.getRowCount()-1);
-}
-    
-    public void readTable(String[] prod){
+        AtulizaBanco(ultimacod, fun.getMatricula(), valor, tempqte);
+        ((DefaultTableModel) jTable1.getModel()).removeRow(jTable1.getRowCount() - 1);
+    }
+
+    public void readTable(String[] prods) {
         DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
-        
-        
-        double valor = Double.parseDouble(prod[5]) * Integer.parseInt(jTxtQte.getText());
-        
+
+        String prod[] = new String[6];
+        prod = prods;
+        double valores = 0;
+        valores = Double.parseDouble(prod[5]) * Integer.parseInt(jTxtQte.getText());
+        if(Integer.parseInt(prods[3]) >0){
         modelo.addRow(new Object[]{
             prod[0],
             prod[1] + " " + prod[2],
             Integer.parseInt(jTxtQte.getText()),
-            "R$ " + String.valueOf(valor)
-        }); 
-        SubMatAdd(valor,Double.parseDouble(jTxtSubTotal.getText()));
-                        
+            "R$ " + String.valueOf(valores)
+        });
+        SubMatAdd(valores, Double.parseDouble(jTxtSubTotal.getText()));
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "NAO A QUANTIDADE EM ESTOQUE");
+        }
     }
-    private void SubMatAdd(double valor, double sub){
+
+    private void SubMatAdd(double valor, double sub) {
         double result = 0;
         result = valor + sub;
-         System.out.println("valor pra add:" +result);
+        System.out.println("valor pra add:" + result);
         jTxtSubTotal.setText(String.valueOf(result));
     }
-    
-    private void SubMatRemove(double valor, double sub){
+
+    private void SubMatRemove(double valor, double sub) {
         double result = 0;
         result = sub - valor;
-        if(result <= 0){
-            result =0;
+        if (result <= 0) {
+            result = 0;
         }
-        System.out.println("valor:"+valor+"sub:"+sub+"valor pra remover:" +result);
         jTxtSubTotal.setText(String.valueOf(result));
+    }
+
+    private void AtulizaBanco(String cod, int matricula, double valor, int qte) {
+        try {
+            venda.Atualizar(cod, matricula, valor);
+            Produto.ProdAtualizarQte(cod, qte);
+        } catch (Exception ex) {
+            Logger.getLogger(JCaixa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private String[] Add(String cod) {
+        try {
+            // TODO add your handling code here:
+            ultimaQte = 0;
+            ultimoValor = 0;
+            String prod[] = new String[6];
+
+            prod = Produto.buscaProd(cod);
+
+            if (venda.BuscaQte(cod) == Integer.parseInt(prod[3])) {
+                valor = venda.BuscaultValor(cod) + (Double.parseDouble(prod[5]) * Integer.parseInt(jTxtQte.getText()));
+                int TempQte = Integer.parseInt(prod[3]) - Integer.parseInt(jTxtQte.getText());
+                AtulizaBanco(cod, fun.getMatricula(), valor, TempQte);
+                ultimoValor = (Double.parseDouble(prod[5]) * Integer.parseInt(jTxtQte.getText()));
+                ultimaQte = Integer.parseInt(jTxtQte.getText());
+                ultimacod = cod;
+                return prod;
+            } else if (Integer.parseInt(jTxtQte.getText()) <= Integer.parseInt(prod[3])) {
+                valor = (Double.parseDouble(prod[5]) * Integer.parseInt(jTxtQte.getText()));
+                venda.Entrar(cod, fun.getMatricula(), valor);
+                int TempQte = Integer.parseInt(prod[3]) - Integer.parseInt(jTxtQte.getText());
+                Produto.ProdAtualizarQte(cod, TempQte);
+                ultimoValor = (Double.parseDouble(prod[5]) * Integer.parseInt(jTxtQte.getText()));
+                ultimaQte = Integer.parseInt(jTxtQte.getText());
+                ultimacod = cod;
+                return prod;
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(JCaixa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    private void Zerar() {
+        jPanelCaixa.setVisible(true);
+        jPanelFinalcompra.setVisible(false);
+        jTxtSubTotal.setText("0");
+        jValorclient.setText("");
+        jTroco.setText("");
     }
 
     /**
@@ -112,6 +167,11 @@ public class JCaixa extends javax.swing.JFrame {
         jPanelCaixa = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
         jTxtCodBarra = new javax.swing.JTextField();
         jTxtSubTotal = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -130,11 +190,12 @@ public class JCaixa extends javax.swing.JFrame {
         jBtnFinalizar = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItemSair = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItemAddQte = new javax.swing.JMenuItem();
+        jMenuItemExcluir = new javax.swing.JMenuItem();
+        jMenuItemCancelarC = new javax.swing.JMenuItem();
+        jMenuItemFinalizar = new javax.swing.JMenuItem();
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -152,7 +213,7 @@ public class JCaixa extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Caixa Aberto");
 
-        jPanelCaixa.setBackground(new java.awt.Color(102, 102, 255));
+        jPanelCaixa.setBackground(new java.awt.Color(0, 153, 255));
 
         jButton1.setText("Finalizar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -161,15 +222,51 @@ public class JCaixa extends javax.swing.JFrame {
             }
         });
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 179));
+
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("Sair - ESC");
+
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("Adicionar Qte - F3");
+
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("Excluir Ultimo item - F4");
+
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("Cancelar Compra - F5");
+
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setText("Finalizar Compra - F9");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 175, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(201, 201, 201)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel9)
+                .addContainerGap(270, Short.MAX_VALUE))
         );
 
         jTxtCodBarra.addActionListener(new java.awt.event.ActionListener() {
@@ -179,6 +276,7 @@ public class JCaixa extends javax.swing.JFrame {
         });
 
         jTxtSubTotal.setEditable(false);
+        jTxtSubTotal.setText("0");
         jTxtSubTotal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTxtSubTotalActionPerformed(evt);
@@ -306,7 +404,7 @@ public class JCaixa extends javax.swing.JFrame {
         );
         jLayeredPaneCaixa.setLayer(jPanelCaixa, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        jPanelFinalcompra.setBackground(new java.awt.Color(255, 255, 153));
+        jPanelFinalcompra.setBackground(new java.awt.Color(128, 204, 255));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 3, 24)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -386,47 +484,58 @@ public class JCaixa extends javax.swing.JFrame {
         );
         jLayeredPaneFinalCompra.setLayer(jPanelFinalcompra, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        jMenuBar1.setBackground(new java.awt.Color(0, 0, 204));
+
         jMenu2.setText("Arquivos");
 
-        jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0));
-        jMenuItem4.setText("Sair");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0));
+        jMenuItemSair.setText("Sair");
+        jMenuItemSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
+                jMenuItemSairActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem4);
+        jMenu2.add(jMenuItemSair);
 
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Comandos");
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
-        jMenuItem1.setText("Adicionar Qte");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemAddQte.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
+        jMenuItemAddQte.setText("Adicionar Qte");
+        jMenuItemAddQte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                jMenuItemAddQteActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem1);
+        jMenu3.add(jMenuItemAddQte);
 
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, 0));
-        jMenuItem2.setText("Excluir");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemExcluir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, 0));
+        jMenuItemExcluir.setText("Excluir");
+        jMenuItemExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                jMenuItemExcluirActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem2);
+        jMenu3.add(jMenuItemExcluir);
 
-        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F9, 0));
-        jMenuItem3.setText("Finalizar compra");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemCancelarC.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0));
+        jMenuItemCancelarC.setText("Cancelar Compra");
+        jMenuItemCancelarC.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                jMenuItemCancelarCActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem3);
+        jMenu3.add(jMenuItemCancelarC);
+
+        jMenuItemFinalizar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F9, 0));
+        jMenuItemFinalizar.setText("Finalizar compra");
+        jMenuItemFinalizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFinalizarActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItemFinalizar);
 
         jMenuBar1.add(jMenu3);
 
@@ -453,108 +562,53 @@ public class JCaixa extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        jValorFinal.setVisible(true);
-        jTroco.setVisible(true);
-        jPanelCaixa.setVisible(false);
-        jPanelFinalcompra.setVisible(true);
-        jBtnFinalizar.setVisible(true);
-        jValorFinal.setText(jTxtSubTotal.getText());
+        if (jTxtSubTotal.getText() == "" || jTxtSubTotal.getText() == "0" || jTxtSubTotal.getText() == " " || jTxtSubTotal.getText() == null) {
+            JOptionPane.showMessageDialog(this, "ERRO AO FINALIZAR COMPRA: " + "\nNAO A ITEM ADD AO CAIXA ");
+        } else {
+
+            jValorFinal.setVisible(true);
+            jTroco.setVisible(true);
+            jPanelCaixa.setVisible(false);
+            jPanelFinalcompra.setVisible(true);
+            jBtnFinalizar.setVisible(true);
+            jValorFinal.setText(jTxtSubTotal.getText());
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTxtSubTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtSubTotalActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_jTxtSubTotalActionPerformed
 
     private void jTxtCodBarraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtCodBarraActionPerformed
-        // TODO add your handling code here:
-        this.ultimoValor = 0;
-        this.ultimaQte = 0;
-        this.ultimaPossicaoAdd = 0;
-        try {
-            String prod[] = new String[6];
-            String qte[] = new String[3];
-                 prod = Produto.buscaProd(jTxtCodBarra.getText());
-                 if(prod[1] != null ){
-                     qte[0] = prod[0];
-                     qte[1] = prod[3];
-                     qte[2] = prod[5];
-                     if(!Quantidade.isEmpty()){
-                        for(int i=0;i<Quantidade.size();i++){
-                           if(qte[0].equals(Quantidade.get(i)[0])){
-                               if(Integer.parseInt(jTxtQte.getText())<=Integer.parseInt(Quantidade.get(i)[1])){
-                                   int qteTemp = 0;
-                                   double valorTemp;
-                                   qteTemp = Integer.parseInt(Quantidade.get(i)[1])-Integer.parseInt(jTxtQte.getText());
-                                   valorTemp = Double.parseDouble(Quantidade.get(i)[2])+(Double.parseDouble(qte[2]) * Integer.parseInt(jTxtQte.getText()));
-                                   this.ultimaQte = Integer.parseInt(jTxtQte.getText());
-                                   this.ultimoValor = Double.parseDouble(qte[2]) * Integer.parseInt(jTxtQte.getText());
-                                   this.ultimaPossicaoAdd = i;
-                                   Quantidade.get(i)[1] = String.valueOf(qteTemp);
-                                   Quantidade.get(i)[2] = String.valueOf(valorTemp);
-                                   readTable(prod);
-                                   jTxtCodBarra.setText("");
-                                   System.out.println("sai if");
-                                   break;
-                               }else{
-                                   JOptionPane.showMessageDialog(this, "Quantidade indisponivez em estoque");
-                               }                       
-                           }  
-                            
-                        }
-                     }
-                     else{
-                        if(Integer.parseInt(jTxtQte.getText())<=Integer.parseInt(qte[1])){    
-                            this.ultimaQte = Integer.parseInt(qte[1]);
-                            this.ultimoValor = Double.parseDouble(qte[2]) * Integer.parseInt(jTxtQte.getText());
-                            this.ultimaPossicaoAdd = 0;
-                            qte[1] = String.valueOf(Integer.parseInt(qte[1]) - Integer.parseInt(jTxtQte.getText()));
-                            Quantidade.add(qte);
-                            readTable(prod);
-                            jTxtCodBarra.setText("");
-                            System.out.println("sai else");
-                        }
-                        else{
-                           JOptionPane.showMessageDialog(this, "Quantidade indisponivez em estoque");
-                        } 
-                    }
-                     for (int i = 0; i < Quantidade.size(); i++) {
-                         System.out.println(Quantidade.get(i)[0]);
-                         System.out.println(Quantidade.get(i)[1]);
-                         System.out.println(Quantidade.get(i)[2]);
-                     }
-                 }
-                 prod = null;
-        }        
-        catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex);
-        }
-                 
+
+        readTable(Add(jTxtCodBarra.getText()));
+        jTxtCodBarra.setText("");
     }//GEN-LAST:event_jTxtCodBarraActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void jMenuItemAddQteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddQteActionPerformed
         // TODO add your handling code here:
-        if(jTxtQte.isCursorSet()){
+        if (jTxtQte.isCursorSet()) {
             jTxtCodBarra.grabFocus();
             jTxtQte.setEditable(false);
-        }else{
+        } else {
             jTxtQte.setEditable(true);
             jTxtQte.grabFocus();
         }
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_jMenuItemAddQteActionPerformed
 
     private void jTxtQteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtQteActionPerformed
         // TODO add your handling code here:
         jTxtCodBarraActionPerformed(evt);
         jTxtQte.setText("1");
         jTxtQte.setEditable(false);
-        
+
     }//GEN-LAST:event_jTxtQteActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    private void jMenuItemFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFinalizarActionPerformed
         // TODO add your handling code here:
         jButton1ActionPerformed(evt);
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    }//GEN-LAST:event_jMenuItemFinalizarActionPerformed
 
     private void jComboBoxPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxPagamentoActionPerformed
         // TODO add your handling code here:
@@ -569,55 +623,60 @@ public class JCaixa extends javax.swing.JFrame {
 
     private void jBtnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnFinalizarActionPerformed
         // TODO add your handling code here:
-        
-        if(jComboBoxPagamento.getSelectedItem().equals("<Selecione Metodo de Pagamento>")){
+
+        if (jComboBoxPagamento.getSelectedItem().equals("<Selecione Metodo de Pagamento>")) {
             JOptionPane.showMessageDialog(this, "Selecione um Metodo de Pagamento");
-        }
-        else{
-            if(jValorclient.getText() == "" || jValorclient.getText() == "0" || jValorclient.getText() == " "){
+        } else {
+            if (jValorclient.getText() == "" || jValorclient.getText() == "0" || jValorclient.getText() == " " || jValorclient.getText() == null) {
                 JOptionPane.showMessageDialog(this, "Infome o valor pago");
-            }
-            else{
-                
+            } else {
                 cont++;
-                vendaCaixas.setFuncioranrio(fun);
-                vendaCaixas.setData(LocalDate.now());
-                vendaCaixas.setVendas(cont);
-                double valortotal = 0;
-                for (int i = 0; i < Quantidade.size(); i++) {
-                    System.out.println("entrei");
-                    double valor =0;
-                    //valor = Double.parseDouble(Quantidade.get(i)[3]);          
-                    valortotal += valor;
-                    valor = 0;
-                }
-                vendaCaixas.setValor(valortotal);
-                try {
-                    readTable();
-                    Quantidade.clear();
-                } catch (Exception ex) {
-                    Logger.getLogger(JCaixa.class.getName()).log(Level.SEVERE, null, ex);
-                }
+
                 JOptionPane.showMessageDialog(this, "compra Finalizada");
-                jPanelCaixa.setVisible(true);
-                jPanelFinalcompra.setVisible(false);
-                jTxtSubTotal.setText("0");
-                jValorclient.setText("");
-                jTroco.setText("");
+                Zerar();
+                readTable();
             }
         }
     }//GEN-LAST:event_jBtnFinalizarActionPerformed
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        // TODO add your handling code here:
-        this.dispose();
-        
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
+    private void jMenuItemSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSairActionPerformed
+        try {
+            // TODO add your handling code here:
+            LocalDate data = LocalDate.now();
+            String DATA = String.valueOf(data);
+            String ano = DATA.substring(0, 4);
+            String mes = DATA.substring(5, 7);
+            String dia = DATA.substring(8);
+            String dmaData = dia + "/" + mes + "/" + ano;
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+            caixa.inserir(fun.getMatricula(), cont, dmaData, venda.BuscarTotalValor());
+            System.out.println(fun.getMatricula() + " - " + cont + " - " + dmaData + " - " + venda.BuscarTotalValor());
+            View view = new View(fun);
+            view.setVisible(true);
+            this.dispose();
+            venda.ZerarBd();
+        } catch (Exception ex) {
+            Logger.getLogger(JCaixa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jMenuItemSairActionPerformed
+
+    private void jMenuItemExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExcluirActionPerformed
         // TODO add your handling code here:
-        excluirUltimaLinha();
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+        if (contExcluir == 0) {
+            excluirUltimaLinha();
+            contExcluir++;
+        } else {
+            JOptionPane.showMessageDialog(this, "Ultimo item ja excluido");
+        }
+
+    }//GEN-LAST:event_jMenuItemExcluirActionPerformed
+
+    private void jMenuItemCancelarCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCancelarCActionPerformed
+        // TODO add your handling code here:
+        readTable();
+        Zerar();
+    }//GEN-LAST:event_jMenuItemCancelarCActionPerformed
 
     /**
      * @param args the command line arguments
@@ -663,15 +722,21 @@ public class JCaixa extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JLayeredPane jLayeredPaneCaixa;
     private javax.swing.JLayeredPane jLayeredPaneFinalCompra;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItemAddQte;
+    private javax.swing.JMenuItem jMenuItemCancelarC;
+    private javax.swing.JMenuItem jMenuItemExcluir;
+    private javax.swing.JMenuItem jMenuItemFinalizar;
+    private javax.swing.JMenuItem jMenuItemSair;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelCaixa;
     private javax.swing.JPanel jPanelFinalcompra;

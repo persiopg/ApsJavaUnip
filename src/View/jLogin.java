@@ -1,4 +1,3 @@
-
 package View;
 
 import Modal.LoginDao;
@@ -13,14 +12,15 @@ import javax.swing.JOptionPane;
  * @author user
  */
 public class jLogin extends javax.swing.JFrame {
-     FuncionarioDao func;
-     LoginDao login;
-     View view;
-     
+
+    FuncionarioDao func;
+    LoginDao login;
+    View view;
+
     public jLogin() throws Exception {
         initComponents();
         func = new FuncionarioDao();
-        
+
     }
 
     @SuppressWarnings("unchecked")
@@ -38,7 +38,7 @@ public class jLogin extends javax.swing.JFrame {
         setName(""); // NOI18N
         setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(204, 204, 255));
+        jPanel1.setBackground(new java.awt.Color(179, 224, 255));
 
         jLabel1.setText("Nome:");
 
@@ -123,22 +123,21 @@ public class jLogin extends javax.swing.JFrame {
         login = new LoginDao();
         String user = jTxtuser.getText();
         String pass = jPassword.getText();
-        
-         try {
-            if(login.getLogin(user, pass)){                
-                this.dispose();                
+
+        try {
+            if (login.getLogin(user, pass)) {
+                this.dispose();
                 view = new View(Funcionario.getFuncionario(user, pass));
                 view.setVisible(true);
-             }
-             else{
-                 JOptionPane.showMessageDialog(null,"NOME OU SENHA INVALIDA");
-             }
-            
-         } catch (Exception ex) {
-             Logger.getLogger(jLogin.class.getName()).log(Level.SEVERE, null, ex);
-         }
-         
-        
+            } else {
+                JOptionPane.showMessageDialog(null, "NOME OU SENHA INVALIDA");
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(jLogin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordActionPerformed

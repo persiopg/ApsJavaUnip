@@ -5,9 +5,8 @@ import java.awt.List;
 import java.sql.*;
 import java.util.ArrayList;
 
-
-
 public class ProdutoDao {
+
     private String cod_barra;
     private String nm_prod;
     private String vol_prod;
@@ -17,15 +16,14 @@ public class ProdutoDao {
     private ProdutoDao produto;
     private final ConectionFactory con = new ConectionFactory();
     private PreparedStatement pst;
-    
-    
-    public ProdutoDao busca(String cod) throws Exception{              
+
+    public ProdutoDao busca(String cod) throws Exception {
         String use = "SELECT * FROM tb_produto WHERE cod_barra LIKE ?;";
         pst = con.Conection().prepareStatement(use);
         pst.setString(1, cod);
         ResultSet resultUser = pst.executeQuery();
-        
-        while (resultUser.next()) {        
+
+        while (resultUser.next()) {
             cod_barra = resultUser.getString("cod_barra");
             nm_prod = resultUser.getString("nm_prod");
             vol_prod = resultUser.getString("vol_prod");
@@ -33,93 +31,98 @@ public class ProdutoDao {
             vl_compra = resultUser.getDouble("vl_compra");
             vl_venda = resultUser.getDouble("vl_venda");
         }
-         
+
         pst.close();
         con.Close();
         produto = new ProdutoDao();
-        
-        produto.setCod_barra(cod_barra);        
+
+        produto.setCod_barra(cod_barra);
         produto.setNm_prod(nm_prod);
         produto.setVol_prod(vol_prod);
         produto.setQte_prod(qte_prod);
         produto.setVl_compra(vl_compra);
         produto.setVl_venda(vl_venda);
-        
+
         return produto;
-        
+
     }
-    public void cadastrar (ProdutoDao prod) throws Exception{
+
+    public void cadastrar(ProdutoDao prod) throws Exception {
         String use = "INSERT INTO tb_produto (cod_barra, nm_prod, vol_prod, qte_prod, vl_compra, vl_venda) VALUES(?,?,?,?,?,?);";
-        pst = con.Conection().prepareStatement(use);        
+        pst = con.Conection().prepareStatement(use);
         pst.setString(1, prod.getCod_barra());
         pst.setString(2, prod.getNm_prod());
-        pst.setString(3,prod.getVol_prod());
-        pst.setInt(4,prod.getQte_prod());
-        pst.setDouble(5,prod.getVl_compra());
-        pst.setDouble(6,prod.getVl_venda());               
+        pst.setString(3, prod.getVol_prod());
+        pst.setInt(4, prod.getQte_prod());
+        pst.setDouble(5, prod.getVl_compra());
+        pst.setDouble(6, prod.getVl_venda());
         pst.execute();
         pst.close();
         con.Close();
     }
-    public void Atualizar(ProdutoDao prod) throws Exception{
+
+    public void AtualizarQte(int qte, String cod) throws Exception {
+        String use = "UPDATE tb_produto SET qte_prod = ? WHERE cod_barra = ?";
+        pst = con.Conection().prepareStatement(use);
+        pst.setInt(1, qte);
+        pst.setString(2, cod);
+        pst.execute();
+        pst.close();
+        con.Close();
+    }
+
+    public void Atualizar(ProdutoDao prod) throws Exception {
         String use = "UPDATE tb_produto SET cod_barra = ?, nm_prod = ?, vol_prod = ?, qte_prod = ?, vl_compra = ?, vl_venda = ? WHERE cod_barra = ?";
-        pst = con.Conection().prepareStatement(use);        
+        pst = con.Conection().prepareStatement(use);
         pst.setString(1, prod.getCod_barra());
         pst.setString(2, prod.getNm_prod());
-        pst.setString(3,prod.getVol_prod());
-        pst.setInt(4,prod.getQte_prod());
-        pst.setDouble(5,prod.getVl_compra());
-        pst.setDouble(6,prod.getVl_venda());       
+        pst.setString(3, prod.getVol_prod());
+        pst.setInt(4, prod.getQte_prod());
+        pst.setDouble(5, prod.getVl_compra());
+        pst.setDouble(6, prod.getVl_venda());
         pst.setString(7, prod.getCod_barra());
         pst.execute();
         pst.close();
         con.Close();
     }
-    private ResultSet Buscartodos() throws Exception{
-        
+
+    private ResultSet Buscartodos() throws Exception {
+
         String use = "SELECT * FROM tb_produto;";
         pst = con.Conection().prepareStatement(use);
         ResultSet resultUser = pst.executeQuery();
-        
+
         return resultUser;
     }
 
-    public ArrayList<ProdutoDao> Produtos() throws Exception{
-        ArrayList<ProdutoDao> produtos = new ArrayList<>();        
-        
+    public ArrayList<ProdutoDao> Produtos() throws Exception {
+        ArrayList<ProdutoDao> produtos = new ArrayList<>();
+
         ResultSet resultUser = Buscartodos();
-        
+
         while (resultUser.next()) {
             ProdutoDao prod = new ProdutoDao();
-            
+
             prod.setCod_barra(resultUser.getString("cod_barra"));
             prod.setNm_prod(resultUser.getString("nm_prod"));
             prod.setVol_prod(resultUser.getString("vol_prod"));
             prod.setQte_prod(resultUser.getInt("qte_prod"));
             prod.setVl_compra(resultUser.getDouble("vl_compra"));
-            prod.setVl_venda(resultUser.getDouble("vl_venda"));  
-            
+            prod.setVl_venda(resultUser.getDouble("vl_venda"));
+
             produtos.add(prod);
-            
+
             prod = null;
-        }  
-               
+        }
+
         return produtos;
     }
-    public static final ArrayList<ProdutoDao> ProdVenda(ProdutoDao prod) throws Exception{
-        ArrayList<ProdutoDao> produtos = new ArrayList<>();        
-        produtos.add(prod);
-        
-        return produtos;
-     }
-    
+
     public String getNm_prod() {
         return nm_prod;
     }
-    
-    
-   // public 
 
+    // public 
     public String getCod_barra() {
         return cod_barra;
     }
@@ -163,14 +166,5 @@ public class ProdutoDao {
     public void setVl_venda(double vl_venda) {
         this.vl_venda = vl_venda;
     }
-    public String getProdutoString(String cod) throws Exception{
-        String produtos;
-        ProdutoDao prod = busca(cod);
-        produtos = prod.toString();
-        return produtos;
-    }
-    @Override
-    public String toString() {
-        return "nm_prod= " + nm_prod + "----------vol_prod= " + vol_prod ;
-    }
+
 }

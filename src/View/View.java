@@ -7,6 +7,7 @@ package View;
 
 import Modal.FuncionarioDao;
 import Controller.*;
+import Modal.CaixaDao;
 import Modal.ProdutoDao;
 import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import java.util.ArrayList;
@@ -20,38 +21,36 @@ import javax.swing.table.DefaultTableModel;
  * @author user
  */
 public class View extends javax.swing.JFrame {
-        JCaixa caixa;
-        ConectionFactory con;
-        FuncionarioDao funcDao;
-        TableCt Modelo;
-        
+
+    FuncionarioDao funcDao;
+
 ////    
-    public View(FuncionarioDao fun) throws Exception{        
-        con = new ConectionFactory();
-        con.Conection();       
+    public View(FuncionarioDao fun) throws Exception {
         funcDao = new FuncionarioDao();
         funcDao = fun;
         initComponents();
         Inicializacao();
         LoadTable();
-        
+
     }
-     public void LoadTable(){
-               
-            try {
-                readTable();
-            } catch (Exception ex) {
-                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
+    public void LoadTable() {
+
+        try {
+            readTable1();
+            readTable2();
+        } catch (Exception ex) {
+            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
-    public void readTable() throws Exception{
+
+    public void readTable1() throws Exception {
         ProdutoDao prod = new ProdutoDao();
         DefaultTableModel modelo = (DefaultTableModel) jTableEstoque.getModel();
         modelo.setRowCount(0);
-        
-        for(ProdutoDao p:prod.Produtos()){
-            
+
+        for (ProdutoDao p : prod.Produtos()) {
+
             modelo.addRow(new Object[]{
                 p.getCod_barra(),
                 p.getNm_prod(),
@@ -62,23 +61,40 @@ public class View extends javax.swing.JFrame {
             });
         }
     }
-    public View(){              
+
+    public void readTable2() throws Exception {
+        CaixaDao caixa = new CaixaDao();
+        DefaultTableModel modelo = (DefaultTableModel) jTableCaixa.getModel();
+        modelo.setRowCount(0);
+        for (CaixaDao c : caixa.Vendas()) {
+            modelo.addRow(new Object[]{
+                c.getFuncioranrio().getMatricula(),
+                c.getQte(),
+                c.getData(),
+                c.getValor()
+            });
+        }
+    }
+
+    public View() {
         initComponents();
         Inicializacao();
     }
-    private void Inicializacao(){
+
+    private void Inicializacao() {
         jPanelCorpoBase.setVisible(true);
-        PainelView(false, false, false);                        
+        PainelView(false, false, false);
         jNomeFunc.setText(funcDao.getNome());
-        jPermissao.setText(String.valueOf(funcDao.isPermissao()));
-        
+        jMatricula.setText(String.valueOf(funcDao.getMatricula()));
+
     }
-    
-    private void PainelView(boolean btnFunc, boolean btnEstoq, boolean btnCad){        
+
+    private void PainelView(boolean btnFunc, boolean btnEstoq, boolean btnCad) {
         jPanelBaseEstoque.setVisible(btnEstoq);
         jPanelBaseCadProd.setVisible(btnCad);
-        jPanelBaseFuncionario.setVisible( btnFunc);
+        jPanelBaseFuncionario.setVisible(btnFunc);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -94,7 +110,7 @@ public class View extends javax.swing.JFrame {
         jBtnGrafico = new javax.swing.JButton();
         jBtnEntradaProd = new javax.swing.JButton();
         jNomeFunc = new javax.swing.JLabel();
-        jPermissao = new javax.swing.JLabel();
+        jMatricula = new javax.swing.JLabel();
         jPanelCorpoBase = new javax.swing.JPanel();
         jLayeredPaneEstoque = new javax.swing.JLayeredPane();
         jPanelBaseEstoque = new javax.swing.JPanel();
@@ -137,8 +153,9 @@ public class View extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema Caixas");
 
-        jPanelMenu.setBackground(new java.awt.Color(153, 153, 255));
+        jPanelMenu.setBackground(new java.awt.Color(0, 92, 153));
 
+        jBtnCaixa.setBackground(new java.awt.Color(102, 204, 255));
         jBtnCaixa.setText("Caixa");
         jBtnCaixa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -146,13 +163,15 @@ public class View extends javax.swing.JFrame {
             }
         });
 
-        jBtnEstoque.setText("Estoque");
+        jBtnEstoque.setBackground(new java.awt.Color(102, 204, 255));
+        jBtnEstoque.setText("Estoque / Historico Caixa");
         jBtnEstoque.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtnEstoqueActionPerformed(evt);
             }
         });
 
+        jBtnGrafico.setBackground(new java.awt.Color(102, 204, 255));
         jBtnGrafico.setText("Cadastros funcionario");
         jBtnGrafico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -160,16 +179,22 @@ public class View extends javax.swing.JFrame {
             }
         });
 
-        jBtnEntradaProd.setText("Entrada/cadastro de produto");
+        jBtnEntradaProd.setBackground(new java.awt.Color(102, 204, 255));
+        jBtnEntradaProd.setText("Entrada / cadastro de produto");
         jBtnEntradaProd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtnEntradaProdActionPerformed(evt);
             }
         });
 
+        jNomeFunc.setBackground(new java.awt.Color(255, 204, 153));
+        jNomeFunc.setForeground(new java.awt.Color(255, 204, 153));
         jNomeFunc.setText("nome");
+        jNomeFunc.setToolTipText("");
 
-        jPermissao.setText("permissao");
+        jMatricula.setForeground(new java.awt.Color(255, 204, 153));
+        jMatricula.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jMatricula.setText("permissao");
 
         javax.swing.GroupLayout jPanelMenuLayout = new javax.swing.GroupLayout(jPanelMenu);
         jPanelMenu.setLayout(jPanelMenuLayout);
@@ -185,7 +210,7 @@ public class View extends javax.swing.JFrame {
                     .addGroup(jPanelMenuLayout.createSequentialGroup()
                         .addComponent(jNomeFunc, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPermissao, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -203,16 +228,18 @@ public class View extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jNomeFunc)
-                    .addComponent(jPermissao))
+                    .addComponent(jMatricula))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
-        jPanelCorpoBase.setBackground(new java.awt.Color(204, 255, 0));
+        jPanelCorpoBase.setBackground(new java.awt.Color(77, 184, 255));
 
         jLayeredPaneEstoque.setBackground(new java.awt.Color(255, 255, 255));
 
-        jPanelBaseEstoque.setBackground(new java.awt.Color(0, 51, 204));
+        jPanelBaseEstoque.setBackground(new java.awt.Color(51, 173, 255));
         jPanelBaseEstoque.setLayout(new java.awt.BorderLayout());
+
+        jEstoque.setBackground(new java.awt.Color(0, 122, 204));
 
         jTableEstoque.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -257,14 +284,16 @@ public class View extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE))
         );
 
-        jTabbeGuia.addTab("tab1", jEstoque);
+        jTabbeGuia.addTab("Estoque", jEstoque);
+
+        jCaixa.setBackground(new java.awt.Color(0, 122, 204));
 
         jTableCaixa.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Funcionario", "vendas", "data", "valor"
+                "Funcionario", "Qte vendas", "Data", "Valor total"
             }
         ) {
             Class[] types = new Class [] {
@@ -283,6 +312,12 @@ public class View extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(jTableCaixa);
+        if (jTableCaixa.getColumnModel().getColumnCount() > 0) {
+            jTableCaixa.getColumnModel().getColumn(0).setHeaderValue("Funcionario");
+            jTableCaixa.getColumnModel().getColumn(1).setHeaderValue("Qte vendas");
+            jTableCaixa.getColumnModel().getColumn(2).setHeaderValue("Data");
+            jTableCaixa.getColumnModel().getColumn(3).setHeaderValue("Valor total");
+        }
 
         javax.swing.GroupLayout jCaixaLayout = new javax.swing.GroupLayout(jCaixa);
         jCaixa.setLayout(jCaixaLayout);
@@ -295,7 +330,7 @@ public class View extends javax.swing.JFrame {
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
         );
 
-        jTabbeGuia.addTab("tab2", jCaixa);
+        jTabbeGuia.addTab("Caixa", jCaixa);
 
         jPanelBaseEstoque.add(jTabbeGuia, java.awt.BorderLayout.CENTER);
 
@@ -313,7 +348,7 @@ public class View extends javax.swing.JFrame {
 
         jLayeredPaneCadProd.setBackground(new java.awt.Color(255, 255, 255));
 
-        jPanelBaseCadProd.setBackground(new java.awt.Color(255, 102, 102));
+        jPanelBaseCadProd.setBackground(new java.awt.Color(51, 173, 255));
 
         jLabel1.setText("Codigo de Barras: ");
 
@@ -341,7 +376,7 @@ public class View extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBackground(new java.awt.Color(255, 153, 153));
+        jPanel1.setBackground(new java.awt.Color(51, 173, 255));
 
         jTxtCodBarras.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -409,7 +444,7 @@ public class View extends javax.swing.JFrame {
                 .addGroup(jPanelBaseCadProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jBtnAlterar)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(532, Short.MAX_VALUE))
+                .addContainerGap(526, Short.MAX_VALUE))
         );
         jPanelBaseCadProdLayout.setVerticalGroup(
             jPanelBaseCadProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -448,7 +483,7 @@ public class View extends javax.swing.JFrame {
         );
         jLayeredPaneCadProd.setLayer(jPanelBaseCadProd, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        jPanelBaseFuncionario.setBackground(new java.awt.Color(153, 255, 153));
+        jPanelBaseFuncionario.setBackground(new java.awt.Color(51, 173, 255));
 
         jLabel6.setText("nome: ");
 
@@ -509,7 +544,7 @@ public class View extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jBtnDeletar))
                             .addComponent(jCheckBox1))))
-                .addContainerGap(590, Short.MAX_VALUE))
+                .addContainerGap(562, Short.MAX_VALUE))
         );
         jPanelBaseFuncionarioLayout.setVerticalGroup(
             jPanelBaseFuncionarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -539,7 +574,9 @@ public class View extends javax.swing.JFrame {
         jLayeredPaneFuncionario.setLayout(jLayeredPaneFuncionarioLayout);
         jLayeredPaneFuncionarioLayout.setHorizontalGroup(
             jLayeredPaneFuncionarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanelBaseFuncionario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLayeredPaneFuncionarioLayout.createSequentialGroup()
+                .addGap(0, 22, Short.MAX_VALUE)
+                .addComponent(jPanelBaseFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jLayeredPaneFuncionarioLayout.setVerticalGroup(
             jLayeredPaneFuncionarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -572,7 +609,7 @@ public class View extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanelMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 0, 0)
                 .addComponent(jPanelCorpoBase, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -587,105 +624,101 @@ public class View extends javax.swing.JFrame {
 
     private void jTxtQteProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtQteProdActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_jTxtQteProdActionPerformed
 
     private void jBtnCaixaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnCaixaActionPerformed
         // TODO add your handling code here:
-            caixa =  new JCaixa(funcDao);
-            this.dispose();
-            caixa.setVisible(true);
-       
+        JCaixa caixa = new JCaixa(funcDao);
+        this.dispose();
+        caixa.setVisible(true);
+
     }//GEN-LAST:event_jBtnCaixaActionPerformed
 
     private void jBtnEstoqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEstoqueActionPerformed
         // TODO add your handling code here
-        if(funcDao.isPermissao()){
+        if (funcDao.isPermissao()) {
             PainelView(false, true, false);
-            
-        }
-        else{
+
+        } else {
             JOptionPane.showMessageDialog(null, "Usuario sem permissao");
         }
     }//GEN-LAST:event_jBtnEstoqueActionPerformed
 
     private void jBtnEntradaProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEntradaProdActionPerformed
         // TODO add your handling code here:
-        if(funcDao.isPermissao()){
-        PainelView(false, false, true);
-        }
-        else{
+        if (funcDao.isPermissao()) {
+            PainelView(false, false, true);
+        } else {
             JOptionPane.showMessageDialog(null, "Usuario sem permissao");
         }
     }//GEN-LAST:event_jBtnEntradaProdActionPerformed
 
     private void jTxtCodBarrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtCodBarrasActionPerformed
-            try {
-                // TODO add your handling code here:                
-                 
-                 String prod[] = new String[6];
-                 prod = Produto.buscaProd(jTxtCodBarras.getText());
-                 if(prod[1] != null ){
-                 jTxtNmProd.setText(prod[1]);
-                 jTxtVolumeProd.setText(prod[2]);
-                 jTxtQteProd.setText(prod[3]);
-                 jTxtVlrCompra.setText(prod[4]);
-                 jTxtVlrVenda.setText(prod[5]);
-                 jBtnCadProd.setVisible(false);
-                 }
-                 else{
-                     jTxtNmProd.setText(null);
-                 jTxtVolumeProd.setText(null);
-                 jTxtQteProd.setText(null);
-                 jTxtVlrCompra.setText(null);
-                 jTxtVlrVenda.setText(null);
-                 jBtnCadProd.setVisible(true);
-                 }
-                 
-                 
-            } catch (Exception ex) {
-                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            // TODO add your handling code here:                
+
+            String prod[] = new String[6];
+            prod = Produto.buscaProd(jTxtCodBarras.getText());
+            if (prod[1] != null) {
+                jTxtNmProd.setText(prod[1]);
+                jTxtVolumeProd.setText(prod[2]);
+                jTxtQteProd.setText(prod[3]);
+                jTxtVlrCompra.setText(prod[4]);
+                jTxtVlrVenda.setText(prod[5]);
+                jBtnCadProd.setVisible(false);
+            } else {
+                jTxtNmProd.setText(null);
+                jTxtVolumeProd.setText(null);
+                jTxtQteProd.setText(null);
+                jTxtVlrCompra.setText(null);
+                jTxtVlrVenda.setText(null);
+                jBtnCadProd.setVisible(true);
             }
-            
-                
-        
+
+        } catch (Exception ex) {
+            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
     }//GEN-LAST:event_jTxtCodBarrasActionPerformed
 
     private void jBtnGraficoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnGraficoActionPerformed
         // TODO add your handling code here:
-        
-        if(funcDao.isPermissao()){
+
+        if (funcDao.isPermissao()) {
             PainelView(true, false, false);
-        }
-        else{
+        } else {
             JOptionPane.showMessageDialog(null, "usuario sem permissao");
         }
     }//GEN-LAST:event_jBtnGraficoActionPerformed
 
     private void jBtnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnCadastrarActionPerformed
         // TODO add your handling code here:
-        
-            try {
-                Funcionario.FuncCadastrar(jTxtNome.getText(), jPassword.getText(), Integer.parseInt(jTxtMatricula.getText()), jCheckBox1.getHideActionText());                
-                JOptionPane.showMessageDialog(null, "Cadastro realizada com sucesso");
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-            jTxtNome.setText(null);
-            jTxtMatricula.setText(null);
-            jPassword.setText(null);
-            jCheckBox1.setDropTarget(getDropTarget());
-            jPermissao.setText(String.valueOf(funcDao.isPermissao()));
-            
-        
+
+        try {
+            Funcionario.FuncCadastrar(jTxtNome.getText(), jPassword.getText(), Integer.parseInt(jTxtMatricula.getText()), jCheckBox1.getHideActionText());
+            JOptionPane.showMessageDialog(null, "Cadastro realizada com sucesso");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        jTxtNome.setText(null);
+        jTxtMatricula.setText(null);
+        jPassword.setText(null);
+        jCheckBox1.setDropTarget(getDropTarget());
+        jMatricula.setText(String.valueOf(funcDao.isPermissao()));
+
+
     }//GEN-LAST:event_jBtnCadastrarActionPerformed
 
     private void jTxtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtNomeActionPerformed
-            try {
-                // TODO add your handling code here:
-                jTxtMatricula.setText(funcDao.Busca(jTxtNome.getText()));
-                
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex);            }
+        try {
+            // TODO add your handling code here:
+            jTxtMatricula.setText(funcDao.Busca(jTxtNome.getText()));
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
     }//GEN-LAST:event_jTxtNomeActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
@@ -694,59 +727,57 @@ public class View extends javax.swing.JFrame {
 
     private void jBtnDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnDeletarActionPerformed
         // TODO add your handling code here
-        
-            try {
-                Funcionario.FuncDeletar(jTxtNome.getText(), jPassword.getText(), Integer.parseInt(jTxtMatricula.getText()), jCheckBox1.getHideActionText());
-                JOptionPane.showMessageDialog(null, "Cadastro Deletado com sucesso");
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
-            jTxtNome.setText(null);
-            jTxtMatricula.setText(null);
-            jPassword.setText(null);
-            jCheckBox1.setDisabledIcon(null);    
-            jPermissao.setText(String.valueOf(funcDao.isPermissao()));
+
+        try {
+            Funcionario.FuncDeletar(jTxtNome.getText(), jPassword.getText(), Integer.parseInt(jTxtMatricula.getText()), jCheckBox1.getHideActionText());
+            JOptionPane.showMessageDialog(null, "Cadastro Deletado com sucesso");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        jTxtNome.setText(null);
+        jTxtMatricula.setText(null);
+        jPassword.setText(null);
+        jCheckBox1.setDisabledIcon(null);
 
     }//GEN-LAST:event_jBtnDeletarActionPerformed
 
     private void jBtnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAlterarActionPerformed
-            try {
-                // TODO add your handling code here:
-                int qte = Integer.parseInt(jTxtQteProd.getText());
-                double vl_venda = Double.valueOf(jTxtVlrVenda.getText());
-                double vl_comp = Double.valueOf(jTxtVlrCompra.getText());
+        try {
+            // TODO add your handling code here:
+            int qte = Integer.parseInt(jTxtQteProd.getText());
+            double vl_venda = Double.valueOf(jTxtVlrVenda.getText());
+            double vl_comp = Double.valueOf(jTxtVlrCompra.getText());
 
-                Produto.ProdAtualizar(jTxtCodBarras.getText(), jTxtNmProd.getText(), jTxtVolumeProd.getText(), qte, vl_comp, vl_venda);
-                JOptionPane.showMessageDialog(null, "Cadastro Atualizado");
-                readTable();
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
+            Produto.ProdAtualizar(jTxtCodBarras.getText(), jTxtNmProd.getText(), jTxtVolumeProd.getText(), qte, vl_comp, vl_venda);
+            JOptionPane.showMessageDialog(null, "Cadastro Atualizado");
+            LoadTable();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
     }//GEN-LAST:event_jBtnAlterarActionPerformed
 
     private void jBtnCadProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnCadProdActionPerformed
         // TODO add your handling code here:
         try {
-                // TODO add your handling code here:
+            // TODO add your handling code here:
             String prod[] = new String[6];
-                 prod = Produto.buscaProd(jTxtCodBarras.getText());
-                 if(prod[1] == null ){
-                    int qte = Integer.parseInt(jTxtQteProd.getText());
-                    double vl_venda = Double.valueOf(jTxtVlrVenda.getText());
-                    double vl_comp = Double.valueOf(jTxtVlrCompra.getText());
+            prod = Produto.buscaProd(jTxtCodBarras.getText());
+            if (prod[1] == null) {
+                int qte = Integer.parseInt(jTxtQteProd.getText());
+                double vl_venda = Double.valueOf(jTxtVlrVenda.getText());
+                double vl_comp = Double.valueOf(jTxtVlrCompra.getText());
 
-                    Produto.Prodcadastrar(jTxtCodBarras.getText(), jTxtNmProd.getText(), jTxtVolumeProd.getText(), qte, vl_comp, vl_venda);
-                    JOptionPane.showMessageDialog(null, "Cadastro Atualizado");
-                    readTable();
-                }
-                 else{
-                     JOptionPane.showMessageDialog(null, "produto ja cadastrado");
-                     jTxtCodBarrasActionPerformed(evt);
-                 }
-                 
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex);
+                Produto.Prodcadastrar(jTxtCodBarras.getText(), jTxtNmProd.getText(), jTxtVolumeProd.getText(), qte, vl_comp, vl_venda);
+                JOptionPane.showMessageDialog(null, "Cadastro Atualizado");
+                LoadTable();
+            } else {
+                JOptionPane.showMessageDialog(null, "produto ja cadastrado");
+                jTxtCodBarrasActionPerformed(evt);
             }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
     }//GEN-LAST:event_jBtnCadProdActionPerformed
 
     /**
@@ -813,6 +844,7 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JLayeredPane jLayeredPaneCadProd;
     private javax.swing.JLayeredPane jLayeredPaneEstoque;
     private javax.swing.JLayeredPane jLayeredPaneFuncionario;
+    private javax.swing.JLabel jMatricula;
     private javax.swing.JLabel jNomeFunc;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelBaseCadProd;
@@ -821,7 +853,6 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JPanel jPanelCorpoBase;
     private javax.swing.JPanel jPanelMenu;
     private javax.swing.JPasswordField jPassword;
-    private javax.swing.JLabel jPermissao;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbeGuia;

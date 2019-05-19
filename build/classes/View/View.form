@@ -28,7 +28,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Component id="jPanelMenu" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
               <Component id="jPanelCorpoBase" max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -44,7 +44,7 @@
     <Container class="javax.swing.JPanel" name="jPanelMenu">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="99" red="99" type="rgb"/>
+          <Color blue="99" green="5c" red="0" type="rgb"/>
         </Property>
       </Properties>
 
@@ -61,7 +61,7 @@
                       <Group type="102" attributes="0">
                           <Component id="jNomeFunc" min="-2" pref="72" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jPermissao" min="-2" pref="72" max="-2" attributes="0"/>
+                          <Component id="jMatricula" min="-2" pref="72" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -83,7 +83,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jNomeFunc" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jPermissao" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jMatricula" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="21" max="32767" attributes="0"/>
               </Group>
@@ -93,6 +93,9 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="jBtnCaixa">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="cc" red="66" type="rgb"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Caixa"/>
           </Properties>
           <Events>
@@ -101,7 +104,10 @@
         </Component>
         <Component class="javax.swing.JButton" name="jBtnEstoque">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Estoque"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="cc" red="66" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Estoque / Historico Caixa"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBtnEstoqueActionPerformed"/>
@@ -109,6 +115,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="jBtnGrafico">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="cc" red="66" type="rgb"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Cadastros funcionario"/>
           </Properties>
           <Events>
@@ -117,7 +126,10 @@
         </Component>
         <Component class="javax.swing.JButton" name="jBtnEntradaProd">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Entrada/cadastro de produto"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="cc" red="66" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Entrada / cadastro de produto"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBtnEntradaProdActionPerformed"/>
@@ -125,11 +137,22 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jNomeFunc">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="99" green="cc" red="ff" type="rgb"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="99" green="cc" red="ff" type="rgb"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="nome"/>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jPermissao">
+        <Component class="javax.swing.JLabel" name="jMatricula">
           <Properties>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="99" green="cc" red="ff" type="rgb"/>
+            </Property>
+            <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="permissao"/>
           </Properties>
         </Component>
@@ -138,7 +161,7 @@
     <Container class="javax.swing.JPanel" name="jPanelCorpoBase">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="ff" red="cc" type="rgb"/>
+          <Color blue="ff" green="b8" red="4d" type="rgb"/>
         </Property>
       </Properties>
 
@@ -190,7 +213,7 @@
             <Container class="javax.swing.JPanel" name="jPanelBaseEstoque">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="cc" green="33" red="0" type="rgb"/>
+                  <Color blue="ff" green="ad" red="33" type="rgb"/>
                 </Property>
               </Properties>
 
@@ -206,10 +229,15 @@
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
                   <SubComponents>
                     <Container class="javax.swing.JPanel" name="jEstoque">
+                      <Properties>
+                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="cc" green="7a" red="0" type="rgb"/>
+                        </Property>
+                      </Properties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                          <JTabbedPaneConstraints tabName="tab1">
-                            <Property name="tabTitle" type="java.lang.String" value="tab1"/>
+                          <JTabbedPaneConstraints tabName="Estoque">
+                            <Property name="tabTitle" type="java.lang.String" value="Estoque"/>
                           </JTabbedPaneConstraints>
                         </Constraint>
                       </Constraints>
@@ -296,10 +324,15 @@
                       </SubComponents>
                     </Container>
                     <Container class="javax.swing.JPanel" name="jCaixa">
+                      <Properties>
+                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="cc" green="7a" red="0" type="rgb"/>
+                        </Property>
+                      </Properties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                          <JTabbedPaneConstraints tabName="tab2">
-                            <Property name="tabTitle" type="java.lang.String" value="tab2"/>
+                          <JTabbedPaneConstraints tabName="Caixa">
+                            <Property name="tabTitle" type="java.lang.String" value="Caixa"/>
                           </JTabbedPaneConstraints>
                         </Constraint>
                       </Constraints>
@@ -329,30 +362,30 @@
                                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                                   <Table columnCount="4" rowCount="0">
                                     <Column editable="false" title="Funcionario" type="java.lang.String"/>
-                                    <Column editable="false" title="vendas" type="java.lang.Integer"/>
-                                    <Column editable="false" title="data" type="java.lang.String"/>
-                                    <Column editable="false" title="valor" type="java.lang.Double"/>
+                                    <Column editable="false" title="Qte vendas" type="java.lang.Integer"/>
+                                    <Column editable="false" title="Data" type="java.lang.String"/>
+                                    <Column editable="false" title="Valor total" type="java.lang.Double"/>
                                   </Table>
                                 </Property>
                                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                                   <TableColumnModel selectionModel="0">
                                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
+                                      <Title value="Funcionario"/>
                                       <Editor/>
                                       <Renderer/>
                                     </Column>
                                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
+                                      <Title value="Qte vendas"/>
                                       <Editor/>
                                       <Renderer/>
                                     </Column>
                                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
+                                      <Title value="Data"/>
                                       <Editor/>
                                       <Renderer/>
                                     </Column>
                                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                      <Title/>
+                                      <Title value="Valor total"/>
                                       <Editor/>
                                       <Renderer/>
                                     </Column>
@@ -396,7 +429,7 @@
             <Container class="javax.swing.JPanel" name="jPanelBaseCadProd">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="66" green="66" red="ff" type="rgb"/>
+                  <Color blue="ff" green="ad" red="33" type="rgb"/>
                 </Property>
               </Properties>
 
@@ -433,7 +466,7 @@
                               <Component id="jBtnAlterar" min="-2" max="-2" attributes="0"/>
                               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="532" max="32767" attributes="0"/>
+                          <EmptySpace pref="526" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -517,7 +550,7 @@
                 <Container class="javax.swing.JPanel" name="jPanel1">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="99" green="99" red="ff" type="rgb"/>
+                      <Color blue="ff" green="ad" red="33" type="rgb"/>
                     </Property>
                   </Properties>
 
@@ -581,7 +614,10 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jPanelBaseFuncionario" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="0" pref="22" max="32767" attributes="0"/>
+                      <Component id="jPanelBaseFuncionario" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -594,7 +630,7 @@
             <Container class="javax.swing.JPanel" name="jPanelBaseFuncionario">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="99" green="ff" red="99" type="rgb"/>
+                  <Color blue="ff" green="ad" red="33" type="rgb"/>
                 </Property>
               </Properties>
 
@@ -631,7 +667,7 @@
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace pref="590" max="32767" attributes="0"/>
+                          <EmptySpace pref="562" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
