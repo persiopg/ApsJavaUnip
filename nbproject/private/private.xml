@@ -3,16 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/SistemCaixa/src/Main/Main.java</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/SistemCaixa/src/View/JCaixa.java</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/SistemCaixa/src/Controller/venda.java</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/SistemCaixa/src/Modal/CaixaDao.java</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/SistemCaixa/src/Modal/ProdutoDao.java</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/SistemCaixa/src/Controller/Produto.java</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/SistemCaixa/src/Modal/VendaDao.java</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/SistemCaixa/src/Modal/LoginDao.java</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/SistemCaixa/src/View/View.java</file>
-            <file>file:/C:/Users/user/Documents/NetBeansProjects/SistemCaixa/src/Controller/caixa.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/SistemCaixa/src/View/ViewHome.java</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/SistemCaixa/src/View/ViewCaixa.java</file>
         </group>
     </open-files>
 </project-private>
