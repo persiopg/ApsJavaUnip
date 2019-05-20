@@ -5,7 +5,7 @@
  */
 package Main;
 
-import View.jLogin;
+import View.ViewLogin;
 import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,12 +15,12 @@ import java.util.logging.Logger;
  * @author user
  */
 public class Main {
-   // jLogin main;
+   // ViewLogin main;
    
     public static void main(String[] args) {
         try {
-            
-            jLogin main = new jLogin();
+            //class main inicia a aplicação
+            ViewLogin main = new ViewLogin();
             main.setVisible(true);
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
